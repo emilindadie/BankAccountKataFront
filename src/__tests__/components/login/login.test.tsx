@@ -16,16 +16,27 @@ describe('Login component', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    test('should change the state of email input', () => {
-
+    test('Should change the state of email input', () => {
         // Arrange
         const { container, debug } = render(<Login />);
-        const field: any = container.querySelector('#email');
+        const field: any = container.querySelector('#login-email-input');
 
         // Act
         fireEvent.change(field, { target: { value: 'dadie.emilin@gmail.com' } });
 
         // Assert
         expect(field.value).toBe('dadie.emilin@gmail.com');
+    });
+
+    test('Should change the state of password input', () => {
+        // Arrange
+        const { container, debug } = render(<Login />);
+        const field: any = container.querySelector('#login-password-input');
+
+        // Act
+        fireEvent.change(field, { target: { value: 'azerty' } });
+
+        // Assert
+        expect(field.value).toBe('azerty');
     });
 });

@@ -9,18 +9,31 @@ export function Login() {
     } = useAuth();
 
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     return (
         <form>
             <div>
                 <TextField
-                    id='email'
+                    id='login-email-input'
                     label='Email'
                     margin='normal'
                     variant='outlined'
                     name='email'
                     value={email}
                     onChange={event => setEmail(event.target.value)}
+                />
+            </div>
+            <div>
+                <TextField
+                    id='login-password-input'
+                    label='Password'
+                    margin='normal'
+                    variant='outlined'
+                    type='password'
+                    name='password'
+                    value={password}
+                    onChange={event => setPassword(event.target.value)}
                 />
             </div>
         </form>
