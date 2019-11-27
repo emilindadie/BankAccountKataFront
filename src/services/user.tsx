@@ -1,5 +1,5 @@
 import { Api } from '../api/axios';
-import { CreateUser } from '../models/createUser';
+import { CreateUser } from '../models/user/createUser';
 
 export class UserService {
 

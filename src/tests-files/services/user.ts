@@ -1,5 +1,5 @@
-import { IUser } from '../../models/user.i';
-import { CreateUser } from '../../models/createUser';
+import { IUser } from '../../models/user/user.i';
+import { CreateUser } from '../../models/user/createUser';
 
 export const user: IUser = {
     id: 1,
