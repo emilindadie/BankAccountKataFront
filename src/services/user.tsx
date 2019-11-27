@@ -1,6 +1,9 @@
 export class UserService {
     valideEmailType(inputEmail: string) {
-        return '';
+        if (inputEmail.match(new RegExp('\\@gmail.com|\\@yahoo.com|\\@hotmail.com|\\@hotmail.fr', 'g'))) {
+            return true;
+        }
+        return false;
     }
 
     valideEmailAndPassword(email: string, password: string) {
