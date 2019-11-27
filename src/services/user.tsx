@@ -1,4 +1,4 @@
-import { Api } from "../api/axios";
+import { Api } from '../api/axios';
 
 export class UserService {
 

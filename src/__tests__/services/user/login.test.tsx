@@ -45,4 +45,33 @@ describe('User service', () => {
         // Assert
         expect(output.id).toBeDefined();
     });
+
+    it('should log user (invalid email type)', async () => {
+        // Arrange
+        const inputEmail = 'dadie.emilin';
+        const inputPassword = 'azerty';
+
+        // Act
+        try {
+            const output: any = await service.logUser(inputEmail, inputPassword);
+
+        } catch (e) {
+            // Assert
+            expect(e).toBeInstanceOf(Error);
+        }
+    });
+
+    it('should log user (invalid email and password)', async () => {
+        // Arrange
+        const inputEmail = '';
+        const inputPassword = '';
+
+        // Act
+        try {
+            const output: any = await service.logUser(inputEmail, inputPassword);
+        } catch (e) {
+            // Assert
+            expect(e).toBeInstanceOf(Error);
+        }
+    });
 });

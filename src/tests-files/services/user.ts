@@ -1,4 +1,4 @@
-import { IUser } from "../../models/user.i";
+import { IUser } from '../../models/user.i';
 
 export const user: IUser = {
     id: 1,
@@ -6,4 +6,4 @@ export const user: IUser = {
     email: 'dadie.emilin@gmail.com',
     password: 'azerty',
     address: '14 rue de mulhouse',
-}
+};
