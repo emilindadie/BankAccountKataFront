@@ -1,6 +1,6 @@
 export class UserService {
 
     valideEmailAndPassword(email: string, password: string) {
-        return '';
+        return email.length > 0 && password.length > 0;
     }
 }
