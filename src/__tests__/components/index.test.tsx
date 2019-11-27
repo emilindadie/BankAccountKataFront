@@ -1,7 +1,7 @@
 import React from 'react';
 
 describe('Index component', () => {
-    test("index", () => {
+    test('index', () => {
         expect(true).toBe(true);
     });
 });

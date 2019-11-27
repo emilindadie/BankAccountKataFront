@@ -4,7 +4,9 @@ export const ALT_IMAGE_URL =
 
 export function getLocalStorageValue(key: string) {
     const value = localStorage.getItem(key);
-    if (!value) return null;
+    if (!value) {
+        return null;
+    }
     try {
         return JSON.parse(value);
     } catch (error) {

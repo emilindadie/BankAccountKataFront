@@ -28,6 +28,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll --verbose",
     "test:cov": "jest --coverage",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
