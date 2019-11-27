@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserService } from '../../services/user';
+import { UserService } from '../../../services/user';
 
 describe('User service', () => {
 
@@ -17,7 +17,7 @@ describe('User service', () => {
         // Act
         const output = service.valideEmailAndPassword(inputEmail, inputPassword);
 
-        // Assert 
+        // Assert
         expect(output).toBe(true);
     });
 
@@ -28,8 +28,20 @@ describe('User service', () => {
         // Act
         const output = service.valideEmailType(inputEmail);
 
-        // Assert 
+        // Assert
         expect(output).toBe(true);
+    });
+
+    it('should log user', () => {
+        // Arrange
+        const inputEmail = 'dadie.emilin@gmail.com';
+        const inputPassword = 'azerty';
+
+        // Act
+        const output: any = service.logUser(inputEmail, inputPassword);
+
+        // Assert
+        expect(output.id).toBeDefined();
     });
 
 });
