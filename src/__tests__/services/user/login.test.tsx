@@ -2,7 +2,7 @@ import React from 'react';
 import { UserService } from '../../../services/user';
 import { user } from '../../../tests-files';
 
-describe('User service', () => {
+describe('User service : log user', () => {
 
     let service: UserService;
 
@@ -46,7 +46,7 @@ describe('User service', () => {
         expect(output.id).toBeDefined();
     });
 
-    it('should log user (invalid email type)', async () => {
+    it('should not log user (invalid email type)', async () => {
         // Arrange
         const inputEmail = 'dadie.emilin';
         const inputPassword = 'azerty';
@@ -61,7 +61,7 @@ describe('User service', () => {
         }
     });
 
-    it('should log user (invalid email and password)', async () => {
+    it('should not log user (invalid email and password)', async () => {
         // Arrange
         const inputEmail = '';
         const inputPassword = '';

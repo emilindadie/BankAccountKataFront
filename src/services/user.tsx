@@ -1,6 +1,11 @@
 import { Api } from '../api/axios';
+import { CreateUser } from '../models/createUser';
 
 export class UserService {
+
+    validCreateUserInformation(user: CreateUser) {
+        return user.validProperty();
+    }
 
     validEmailType(inputEmail: string) {
         if (inputEmail.match(new RegExp('\\@gmail.com|\\@yahoo.com|\\@hotmail.com|\\@hotmail.fr', 'g'))) {
@@ -23,5 +28,17 @@ export class UserService {
             return Api.getInstance().post('/user', { email, password });
         }
         throw new Error('Email and password is required!');
+    }
+
+    createUser(user: CreateUser) {
+        const validProperty = user.validProperty();
+        if (!validProperty) {
+            throw new Error('Tous les champs sont obligatoires!');
+        }
+        const valideEmailType = this.validEmailType(user.email);
+        if (!valideEmailType) {
+            throw new Error('Email is not valid');
+        }
+        return Api.getInstance().post('/user', user);
     }
 }
