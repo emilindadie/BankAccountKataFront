@@ -9,8 +9,7 @@ describe('User service', () => {
         service = new UserService();
     });
 
-    it('sould valid email and password', () => {
-
+    it('should valid email and password', () => {
         // Arrange
         const inputEmail = 'dadie.emilin@gmail.com';
         const inputPassword = 'azerty';
@@ -20,7 +19,17 @@ describe('User service', () => {
 
         // Assert 
         expect(output).toBe(true);
+    });
 
+    it('should valid email type', () => {
+        // Arrange
+        const inputEmail = 'dadie.emilin@gmail.com';
+
+        // Act
+        const output = service.valideEmailType(inputEmail);
+
+        // Assert 
+        expect(output).toBe(true);
     });
 
 });
