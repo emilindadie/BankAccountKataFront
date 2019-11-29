@@ -5,12 +5,17 @@ import { Button } from '@material-ui/core';
 import UserService from '../../services/user';
 import { useStyles } from './style';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { setLocalStorage } from '../../utils';
+import { Api } from '../../api/axios';
+import { IUser } from '../../models/user/user.i';
 
 export function Login() {
     const {
         state: { user },
         dispatch,
     } = useAuth();
+    const history = useHistory();
 
     const classes = useStyles();
 
@@ -24,7 +29,11 @@ export function Login() {
         try {
             const response = await UserService.logUser(email, password);
             if (response.data.data) {
+                const token = response.data.data.token;
+                const user = response.data.data.user;
+                updateAuthParams(user, token);
                 dispatch({ type: 'LOAD_USER', user: response.data.data.user });
+                history.push('/home');
             } else {
                 setError(response.data.error);
             }
@@ -32,6 +41,12 @@ export function Login() {
             setError(error);
         }
     };
+
+    function updateAuthParams(user: IUser, token: string) {
+        setLocalStorage('isAuthenticated', JSON.stringify(true));
+        setLocalStorage('user', JSON.stringify(user));
+        Api.setToken(token);
+    }
 
     return (
         <form className={classes.container} noValidate autoComplete='off' onSubmit={handleSubmit}>

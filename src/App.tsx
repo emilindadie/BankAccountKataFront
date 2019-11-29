@@ -1,17 +1,8 @@
 import React from 'react';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  BrowserRouter,
-  Redirect,
-} from 'react-router-dom';
 import { getLocalStorageValue } from './utils';
 import useAuth, { AuthProvider } from './contexts/auth';
-import { Index } from './components/index';
-import Login from './components/login/login';
-import Register from './components/register/register';
+import AppRouter from './routes/appRoute';
 
 const App: React.FC = () => {
   let ignore = false;
@@ -34,15 +25,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path='/'>
-          <Redirect to='/login' />
-        </Route>
-        <Route path='/login' component={Login} />
-        <Route path='/register' component={Register} />
-      </Switch>
-    </BrowserRouter>
+    AppRouter(isAuthenticated)
   );
 
   async function fetchUser() {

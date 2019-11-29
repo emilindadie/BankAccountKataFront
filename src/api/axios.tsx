@@ -10,7 +10,7 @@ export class Api {
         });
     }
 
-    setToken(token: string) {
+    static setToken(token: string) {
         Api.instance.defaults.headers.common['Authorization'] = 'bearer ' + token;
     }
 
