@@ -4,6 +4,8 @@ import Enzyme, { shallow } from 'enzyme';
 import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
 import Register from '../../../components/register/register';
+import UserService from '../../../services/user';
+import { axiosUserResponse } from '../../../tests-files';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,7 +19,7 @@ describe('Register component', () => {
 
     it('Should check that user information is not empty', () => {
         // Arrange
-        const { container, debug } = render(<Register />);
+        const { container } = render(<Register />);
         const nameField: any = container.querySelector('#register_name_input');
         const emailField: any = container.querySelector('#register_email_input');
         const passwordField: any = container.querySelector('#register_password_input');
@@ -36,5 +38,18 @@ describe('Register component', () => {
         expect(emailField.value.length > 0).toBe(true);
         expect(passwordField.value.length > 0).toBe(true);
         expect(addressField.value.length > 0).toBe(true);
+    });
+
+    it('Should call create user service when the form is submitted', async () => {
+        // Arrange
+        const { getByTestId } = render(<Register />);
+        const loginSpy = jest.spyOn(UserService, 'createUser').mockReturnValue(Promise.resolve(axiosUserResponse));
+
+        await act(async () => {
+            fireEvent.click(getByTestId('register_submit_btn'));
+        });
+
+        // Assert
+        expect(loginSpy).toHaveBeenCalledTimes(1);
     });
 });

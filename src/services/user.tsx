@@ -25,7 +25,7 @@ const UserService = {
         }
         const valideEmailAndPasswod = this.validEmailAndPassword(email, password);
         if (valideEmailAndPasswod) {
-            return Api.getInstance().post('/user', { email, password });
+            return Api.getInstance().post('/user/login', { email, password });
         }
         throw new Error('Email and password is required!');
     },
@@ -41,7 +41,6 @@ const UserService = {
         }
         return Api.getInstance().post('/user', user);
     },
-
 };
 
 export default UserService;

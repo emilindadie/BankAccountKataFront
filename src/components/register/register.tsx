@@ -74,7 +74,7 @@ export function Register() {
                 />
             </div>
             <div>
-                <Button variant='contained' color='primary' onClick={handleSubmit}>
+                <Button data-testid='register_submit_btn' variant='contained' color='primary' onClick={handleSubmit}>
                     Inscription
                 </Button>
             </div>

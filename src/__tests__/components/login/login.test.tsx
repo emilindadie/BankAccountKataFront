@@ -19,7 +19,7 @@ describe('Login component', () => {
 
     it('Should change the state of email input', () => {
         // Arrange
-        const { container, debug } = render(<Login />);
+        const { container } = render(<Login />);
         const field: any = container.querySelector('#login_email_input');
 
         // Act
@@ -33,7 +33,7 @@ describe('Login component', () => {
 
     it('Should change the state of password input', () => {
         // Arrange
-        const { container, debug } = render(<Login />);
+        const { container } = render(<Login />);
         const field: any = container.querySelector('#login_password_input');
 
         // Act
@@ -47,7 +47,7 @@ describe('Login component', () => {
 
     it('Should call login service when the form is submitted', async () => {
         // Arrange
-        const { container, debug, getByTestId } = render(<Login />);
+        const { getByTestId } = render(<Login />);
         const loginSpy = jest.spyOn(UserService, 'logUser').mockReturnValue(Promise.resolve(axiosUserResponse));
 
         await act(async () => {
