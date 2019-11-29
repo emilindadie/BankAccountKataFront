@@ -58,4 +58,3 @@ describe('Login component', () => {
         expect(loginSpy).toHaveBeenCalledTimes(1);
     });
 });
-
