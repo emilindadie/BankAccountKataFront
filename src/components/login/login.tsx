@@ -3,12 +3,16 @@ import TextField from '@material-ui/core/TextField';
 import useAuth from '../../contexts/auth';
 import { Button } from '@material-ui/core';
 import UserService from '../../services/user';
+import { useStyles } from './style';
+import { Link } from 'react-router-dom';
 
 export function Login() {
     const {
         state: { user },
         dispatch,
     } = useAuth();
+
+    const classes = useStyles();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,10 +34,11 @@ export function Login() {
     };
 
     return (
-        <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+        <form className={classes.container} noValidate autoComplete='off' onSubmit={handleSubmit}>
             <div>
                 <TextField
                     id='login_email_input'
+                    className={classes.textField}
                     label='Email'
                     margin='normal'
                     variant='outlined'
@@ -45,6 +50,7 @@ export function Login() {
             <div>
                 <TextField
                     id='login_password_input'
+                    className={classes.textField}
                     label='Password'
                     margin='normal'
                     variant='outlined'
@@ -55,12 +61,17 @@ export function Login() {
                 />
             </div>
             <div>
-                <Button data-testid='login_submit_btn' variant='contained' color='primary' id='submit_login_btn' type='submit'>
+                <Button data-testid='login_submit_btn' variant='contained' color='primary' id='submit_login_btn' className={classes.button} type='submit'>
                     CONNEXION
                 </Button>
             </div>
             <div>
-                <span>
+                <li className={classes.list}>
+                    <Link to='/register'>Vous n'avez pas de compte?</Link>
+                </li>
+            </div>
+            <div className={classes.spanContainer}>
+                <span className={classes.span}>
                     {error}
                 </span>
             </div>

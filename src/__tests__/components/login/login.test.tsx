@@ -6,6 +6,7 @@ import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
 import { axiosUserResponse } from '../../../tests-files';
 import UserService from '../../../services/user';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -13,13 +14,13 @@ afterEach(cleanup);
 
 describe('Login component', () => {
     it('renders', () => {
-        const wrapper = shallow(<Login />);
+        const wrapper = shallow(<Router><Login /></Router>);
         expect(wrapper.exists()).toBe(true);
     });
 
     it('Should change the state of email input', () => {
         // Arrange
-        const { container } = render(<Login />);
+        const { container } = render(<Router><Login /></Router>);
         const field: any = container.querySelector('#login_email_input');
 
         // Act
@@ -33,7 +34,7 @@ describe('Login component', () => {
 
     it('Should change the state of password input', () => {
         // Arrange
-        const { container } = render(<Login />);
+        const { container } = render(<Router><Login /></Router>);
         const field: any = container.querySelector('#login_password_input');
 
         // Act
@@ -47,7 +48,7 @@ describe('Login component', () => {
 
     it('Should call login service when the form is submitted', async () => {
         // Arrange
-        const { getByTestId } = render(<Login />);
+        const { getByTestId } = render(<Router><Login /></Router>);
         const loginSpy = jest.spyOn(UserService, 'logUser').mockReturnValue(Promise.resolve(axiosUserResponse));
 
         await act(async () => {

@@ -3,8 +3,11 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import UserService from '../../services/user';
 import { CreateUser } from '../../models/user/createUser';
+import { useStyles } from './style';
+import { Link } from 'react-router-dom';
 
 export function Register() {
+    const classes = useStyles();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
@@ -31,10 +34,11 @@ export function Register() {
     };
 
     return (
-        <form noValidate autoComplete='off'>
+        <form className={classes.container} noValidate autoComplete='off'>
             <div>
                 <TextField
                     id='register_name_input'
+                    className={classes.textField}
                     label='Name'
                     margin='normal'
                     variant='outlined'
@@ -45,6 +49,7 @@ export function Register() {
             <div>
                 <TextField
                     id='register_email_input'
+                    className={classes.textField}
                     label='Email'
                     margin='normal'
                     variant='outlined'
@@ -55,6 +60,7 @@ export function Register() {
             <div>
                 <TextField
                     id='register_address_input'
+                    className={classes.textField}
                     label='Address'
                     margin='normal'
                     variant='outlined'
@@ -65,6 +71,7 @@ export function Register() {
             <div>
                 <TextField
                     id='register_password_input'
+                    className={classes.textField}
                     label='Password'
                     margin='normal'
                     variant='outlined'
@@ -74,9 +81,19 @@ export function Register() {
                 />
             </div>
             <div>
-                <Button data-testid='register_submit_btn' variant='contained' color='primary' onClick={handleSubmit}>
+                <Button data-testid='register_submit_btn' variant='contained' color='primary' className={classes.button} onClick={handleSubmit}>
                     Inscription
                 </Button>
+            </div>
+            <div>
+                <li className={classes.list}>
+                    <Link to='/login'>Vous avez deja un compte?</Link>
+                </li>
+            </div>
+            <div className={classes.spanContainer}>
+                <span className={classes.span}>
+                    {callback}
+                </span>
             </div>
         </form>
     );

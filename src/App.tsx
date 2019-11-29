@@ -10,6 +10,8 @@ import {
 import { getLocalStorageValue } from './utils';
 import useAuth, { AuthProvider } from './contexts/auth';
 import { Index } from './components/index';
+import Login from './components/login/login';
+import Register from './components/register/register';
 
 const App: React.FC = () => {
   let ignore = false;
@@ -35,9 +37,10 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path='/'>
-          <Redirect to='/index' />
+          <Redirect to='/login' />
         </Route>
-        <Route path='/index' component={Index} />
+        <Route path='/login' component={Login} />
+        <Route path='/register' component={Register} />
       </Switch>
     </BrowserRouter>
   );

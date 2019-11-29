@@ -6,6 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import Register from '../../../components/register/register';
 import UserService from '../../../services/user';
 import { axiosUserResponse } from '../../../tests-files';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -13,13 +14,13 @@ afterEach(cleanup);
 
 describe('Register component', () => {
     it('renders', () => {
-        const wrapper = shallow(<Register />);
+        const wrapper = shallow(<Router><Register /></Router>);
         expect(wrapper.exists()).toBe(true);
     });
 
     it('Should check that user information is not empty', () => {
         // Arrange
-        const { container } = render(<Register />);
+        const { container } = render(<Router><Register /></Router>);
         const nameField: any = container.querySelector('#register_name_input');
         const emailField: any = container.querySelector('#register_email_input');
         const passwordField: any = container.querySelector('#register_password_input');
@@ -42,7 +43,7 @@ describe('Register component', () => {
 
     it('Should call create user service when the form is submitted', async () => {
         // Arrange
-        const { getByTestId } = render(<Register />);
+        const { getByTestId } = render(<Router><Register /></Router>);
         const loginSpy = jest.spyOn(UserService, 'createUser').mockReturnValue(Promise.resolve(axiosUserResponse));
 
         await act(async () => {
