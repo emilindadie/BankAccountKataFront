@@ -1,14 +1,8 @@
 import React from 'react';
-import { UserService } from '../../../services/user';
 import { user } from '../../../tests-files';
+import UserService from '../../../services/user';
 
 describe('User service : log user', () => {
-
-    let service: UserService;
-
-    beforeEach(() => {
-        service = new UserService();
-    });
 
     it('should valid email and password', () => {
         // Arrange
@@ -16,7 +10,7 @@ describe('User service : log user', () => {
         const inputPassword = 'azerty';
 
         // Act
-        const output = service.validEmailAndPassword(inputEmail, inputPassword);
+        const output = UserService.validEmailAndPassword(inputEmail, inputPassword);
 
         // Assert
         expect(output).toBe(true);
@@ -27,7 +21,7 @@ describe('User service : log user', () => {
         const inputEmail = 'dadie.emilin@gmail.com';
 
         // Act
-        const output = service.validEmailType(inputEmail);
+        const output = UserService.validEmailType(inputEmail);
 
         // Assert
         expect(output).toBe(true);
@@ -37,10 +31,10 @@ describe('User service : log user', () => {
         // Arrange
         const inputEmail = 'dadie.emilin@gmail.com';
         const inputPassword = 'azerty';
-        spyOn(service, 'logUser').and.returnValue(Promise.resolve(user));
+        spyOn(UserService, 'logUser').and.returnValue(Promise.resolve(user));
 
         // Act
-        const output: any = await service.logUser(inputEmail, inputPassword);
+        const output: any = await UserService.logUser(inputEmail, inputPassword);
 
         // Assert
         expect(output.id).toBeDefined();
@@ -53,7 +47,7 @@ describe('User service : log user', () => {
 
         // Act
         try {
-            const output: any = await service.logUser(inputEmail, inputPassword);
+            const output: any = await UserService.logUser(inputEmail, inputPassword);
 
         } catch (e) {
             // Assert
@@ -68,7 +62,7 @@ describe('User service : log user', () => {
 
         // Act
         try {
-            const output: any = await service.logUser(inputEmail, inputPassword);
+            const output: any = await UserService.logUser(inputEmail, inputPassword);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);

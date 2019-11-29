@@ -1,21 +1,15 @@
 import React from 'react';
-import { UserService } from '../../../services/user';
 import { user, createUser } from '../../../tests-files';
 import * as _ from 'lodash';
+import UserService from '../../../services/user';
 describe('User service : create user', () => {
-
-    let service: UserService;
-
-    beforeEach(() => {
-        service = new UserService();
-    });
 
     it('should valid user information', () => {
         // Arrange
         const inputCreateUser = createUser;
 
         // Act
-        const output = service.validCreateUserInformation(inputCreateUser);
+        const output = UserService.validCreateUserInformation(inputCreateUser);
 
         // Assert
         expect(output).toBe(true);
@@ -26,7 +20,7 @@ describe('User service : create user', () => {
         const inputEmail = 'dadie.emilin@gmail.com';
 
         // Act
-        const output = service.validEmailType(inputEmail);
+        const output = UserService.validEmailType(inputEmail);
 
         // Assert
         expect(output).toBe(true);
@@ -35,10 +29,10 @@ describe('User service : create user', () => {
     it('should create user (all information is valid)', async () => {
         // Arrange
         const inputCreateUser = createUser;
-        spyOn(service, 'createUser').and.returnValue(Promise.resolve(user));
+        spyOn(UserService, 'createUser').and.returnValue(Promise.resolve(user));
 
         // Act
-        const output: any = await service.createUser(inputCreateUser);
+        const output: any = await UserService.createUser(inputCreateUser);
 
         // Assert
         expect(output.id).toBeDefined();
@@ -52,7 +46,7 @@ describe('User service : create user', () => {
 
         // Act
         try {
-            const output: any = await service.createUser(inputCreateUser);
+            const output: any = await UserService.createUser(inputCreateUser);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);
@@ -66,7 +60,7 @@ describe('User service : create user', () => {
 
         // Act
         try {
-            const output: any = await service.createUser(inputCreateUser);
+            const output: any = await UserService.createUser(inputCreateUser);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);
