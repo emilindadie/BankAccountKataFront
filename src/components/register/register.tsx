@@ -16,6 +16,7 @@ export function Register() {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setCallback('');
         const createUser = new CreateUser();
         createUser.name = name;
         createUser.email = email;
@@ -29,7 +30,7 @@ export function Register() {
                 setCallback(response.data.error);
             }
         } catch (error) {
-            setCallback(error);
+            setCallback(error.message);
         }
     };
 

@@ -38,7 +38,7 @@ export function Login() {
                 setError(response.data.error);
             }
         } catch (error) {
-            setError(error);
+            setError(error.message);
         }
     };
 
