@@ -22,6 +22,10 @@ const AccountService = {
         }
         throw new Error('Email is not valid');
     },
+
+    async getAccount(userId: number) {
+        return '';
+    }
 };
 
 export default AccountService;

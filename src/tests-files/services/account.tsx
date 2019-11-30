@@ -44,4 +44,3 @@ export const axiosCreateAccountResponse: AxiosResponse<IAccount> = {
     status: 200,
     statusText: 'OK',
 };
-
