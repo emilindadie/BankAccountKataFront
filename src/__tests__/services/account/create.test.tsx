@@ -14,4 +14,15 @@ describe('Account service : create account', () => {
         // Assert
         expect(output).toBe(true);
     });
+
+    it('should valid email type', () => {
+        // Arrange
+        const inputEmail = 'dadie.emilin@gmail.com';
+
+        // Act
+        const output = AccountService.validEmailType(inputEmail);
+
+        // Assert
+        expect(output).toBe(true);
+    });
 });
