@@ -1,6 +1,7 @@
 import { CreateAccount } from '../../models/account/createAccount';
 import { IAccount } from '../../models/account/account.i';
 import { AxiosResponse } from 'axios';
+import { ApiResponse } from '../../models/apiResponse/apiResponse';
 
 export const account: IAccount = {
     id: 1,
@@ -24,22 +25,45 @@ createAccount.user = {
     address: '14 rue de mulhouse',
 };
 
-export const axiosCreateAccountResponse: AxiosResponse<IAccount> = {
+export const axiosCreateAccountResponse: AxiosResponse<ApiResponse<IAccount>> = {
     data: {
-        id: 1,
-        name: 'compte A',
-        user: {
+        data: {
             id: 1,
-            name: 'Emilin',
-            email: 'dadie.emilin@gmail.com',
-            password: 'azerty',
-            address: '14 rue de mulhouse',
+            name: 'compte A',
+            user: {
+                id: 1,
+                name: 'Emilin',
+                email: 'dadie.emilin@gmail.com',
+                password: 'azerty',
+                address: '14 rue de mulhouse',
+            },
         },
+        error: 'Default error',
     },
     headers: [],
-    config: {
+    config: {},
+    request: [],
+    status: 200,
+    statusText: 'OK',
+};
 
+export const axiosAccountByUserResponse: AxiosResponse<ApiResponse<IAccount[]>> = {
+    data: {
+        data: [{
+            id: 1,
+            name: 'compte A',
+            user: {
+                id: 1,
+                name: 'Emilin',
+                email: 'dadie.emilin@gmail.com',
+                password: 'azerty',
+                address: '14 rue de mulhouse',
+            },
+        }],
+        error: 'Default error',
     },
+    headers: [],
+    config: {},
     request: [],
     status: 200,
     statusText: 'OK',

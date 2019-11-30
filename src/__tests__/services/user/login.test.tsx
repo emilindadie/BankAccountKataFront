@@ -1,6 +1,10 @@
 import React from 'react';
 import { user, axiosUserResponse } from '../../../tests-files';
 import UserService from '../../../services/user';
+import { IUser } from '../../../models/user/user.i';
+import { AxiosResponse } from 'axios';
+import { ApiResponse } from '../../../models/apiResponse/apiResponse';
+import { LoginResponse } from '../../../models/loginResponse/loginResponse';
 
 describe('User service : log user', () => {
 
@@ -10,7 +14,7 @@ describe('User service : log user', () => {
         const inputPassword = 'azerty';
 
         // Act
-        const output = UserService.validEmailAndPassword(inputEmail, inputPassword);
+        const output: boolean = UserService.validEmailAndPassword(inputEmail, inputPassword);
 
         // Assert
         expect(output).toBe(true);
@@ -21,7 +25,7 @@ describe('User service : log user', () => {
         const inputEmail = 'dadie.emilin@gmail.com';
 
         // Act
-        const output = UserService.validEmailType(inputEmail);
+        const output: boolean = UserService.validEmailType(inputEmail);
 
         // Assert
         expect(output).toBe(true);
@@ -31,13 +35,14 @@ describe('User service : log user', () => {
         // Arrange
         const inputEmail = 'dadie.emilin@gmail.com';
         const inputPassword = 'azerty';
-        spyOn(UserService, 'logUser').and.returnValue(Promise.resolve(axiosUserResponse));
+        const loginSpy = jest.spyOn(UserService, 'logUser').mockReturnValue(Promise.resolve(axiosUserResponse));
 
         // Act
-        const output: any = await UserService.logUser(inputEmail, inputPassword);
+        const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserService.logUser(inputEmail, inputPassword);
 
         // Assert
-        expect(output.data.id).toBeDefined();
+        expect(output.data.data.user.id).toBeDefined();
+        expect(loginSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should not log user (invalid email type)', async () => {
@@ -47,7 +52,7 @@ describe('User service : log user', () => {
 
         // Act
         try {
-            const output: any = await UserService.logUser(inputEmail, inputPassword);
+            const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserService.logUser(inputEmail, inputPassword);
 
         } catch (e) {
             // Assert
@@ -62,7 +67,7 @@ describe('User service : log user', () => {
 
         // Act
         try {
-            const output: any = await UserService.logUser(inputEmail, inputPassword);
+            const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserService.logUser(inputEmail, inputPassword);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);

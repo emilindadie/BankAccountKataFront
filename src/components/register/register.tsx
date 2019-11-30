@@ -24,10 +24,8 @@ export function Register() {
         createUser.address = address;
         try {
             const response = await UserService.createUser(createUser);
-            if (response.data.data) {
+            if (response.data) {
                 setCallback('Votre compte à été crée avec succes');
-            } else {
-                setCallback(response.data.error);
             }
         } catch (error) {
             setCallback(error.message);

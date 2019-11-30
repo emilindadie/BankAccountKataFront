@@ -1,24 +1,28 @@
 import { Api } from '../api/axios';
 import { CreateUser } from '../models/user/createUser';
+import { AxiosResponse } from 'axios';
+import { IUser } from '../models/user/user.i';
+import { ApiResponse } from '../models/apiResponse/apiResponse';
+import { LoginResponse } from '../models/loginResponse/loginResponse';
 
 const UserService = {
 
-    validCreateUserInformation(user: CreateUser) {
+    validCreateUserInformation(user: CreateUser): boolean {
         return user.validProperty();
     },
 
-    validEmailType(inputEmail: string) {
+    validEmailType(inputEmail: string): boolean {
         if (inputEmail.match(new RegExp('\\@gmail.com|\\@yahoo.com|\\@hotmail.com|\\@hotmail.fr', 'g'))) {
             return true;
         }
         return false;
     },
 
-    validEmailAndPassword(email: string, password: string) {
+    validEmailAndPassword(email: string, password: string): boolean {
         return email.length > 0 && password.length > 0;
     },
 
-    async logUser(email: string, password: string) {
+    async logUser(email: string, password: string): Promise<AxiosResponse<ApiResponse<LoginResponse>>> {
         const valideEmailType = this.validEmailType(email);
         if (!valideEmailType) {
             throw new Error('Email is not valid');
@@ -30,7 +34,7 @@ const UserService = {
         throw new Error('Email and password is required!');
     },
 
-    async createUser(user: CreateUser) {
+    async createUser(user: CreateUser): Promise<AxiosResponse<ApiResponse<LoginResponse>>> {
         const validProperty = user.validProperty();
         if (!validProperty) {
             throw new Error('Tous les champs sont obligatoires!');
