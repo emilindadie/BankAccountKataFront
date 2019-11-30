@@ -18,28 +18,28 @@ const UserService = {
         return email.length > 0 && password.length > 0;
     },
 
-    logUser(email: string, password: string) {
+    async logUser(email: string, password: string) {
         const valideEmailType = this.validEmailType(email);
         if (!valideEmailType) {
             throw new Error('Email is not valid');
         }
         const valideEmailAndPasswod = this.validEmailAndPassword(email, password);
         if (valideEmailAndPasswod) {
-            return Api.getInstance().post('/user/login', { email, password });
+            return await Api.getInstance().post('/user/login', { email, password });
         }
         throw new Error('Email and password is required!');
     },
 
-    createUser(user: CreateUser) {
+    async createUser(user: CreateUser) {
         const validProperty = user.validProperty();
         if (!validProperty) {
             throw new Error('Tous les champs sont obligatoires!');
         }
         const valideEmailType = this.validEmailType(user.email);
-        if (!valideEmailType) {
-            throw new Error('Email is not valid');
+        if (valideEmailType) {
+            return await Api.getInstance().post('/user', user);
         }
-        return Api.getInstance().post('/user', user);
+        throw new Error('Email is not valid');
     },
 };
 

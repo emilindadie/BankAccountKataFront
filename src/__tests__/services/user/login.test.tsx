@@ -1,5 +1,5 @@
 import React from 'react';
-import { user } from '../../../tests-files';
+import { user, axiosUserResponse } from '../../../tests-files';
 import UserService from '../../../services/user';
 
 describe('User service : log user', () => {
@@ -31,13 +31,13 @@ describe('User service : log user', () => {
         // Arrange
         const inputEmail = 'dadie.emilin@gmail.com';
         const inputPassword = 'azerty';
-        spyOn(UserService, 'logUser').and.returnValue(Promise.resolve(user));
+        spyOn(UserService, 'logUser').and.returnValue(Promise.resolve(axiosUserResponse));
 
         // Act
         const output: any = await UserService.logUser(inputEmail, inputPassword);
 
         // Assert
-        expect(output.id).toBeDefined();
+        expect(output.data.id).toBeDefined();
     });
 
     it('should not log user (invalid email type)', async () => {

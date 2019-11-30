@@ -17,5 +17,5 @@ export const useStyles = makeStyles(theme => ({
         a: {
             textDecoration: 'none',
         },
-    }
+    },
 }));

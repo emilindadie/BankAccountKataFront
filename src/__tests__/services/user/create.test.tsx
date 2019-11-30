@@ -1,5 +1,5 @@
 import React from 'react';
-import { user, createUser } from '../../../tests-files';
+import { axiosUserResponse, createUser } from '../../../tests-files';
 import * as _ from 'lodash';
 import UserService from '../../../services/user';
 describe('User service : create user', () => {
@@ -29,13 +29,13 @@ describe('User service : create user', () => {
     it('should create user (all information is valid)', async () => {
         // Arrange
         const inputCreateUser = createUser;
-        spyOn(UserService, 'createUser').and.returnValue(Promise.resolve(user));
+        spyOn(UserService, 'createUser').and.returnValue(Promise.resolve(axiosUserResponse));
 
         // Act
         const output: any = await UserService.createUser(inputCreateUser);
 
         // Assert
-        expect(output.id).toBeDefined();
+        expect(output.data.id).toBeDefined();
     });
 
     it('should not create user (invalid property)', async () => {

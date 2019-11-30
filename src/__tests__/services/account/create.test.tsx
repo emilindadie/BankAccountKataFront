@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAccount } from '../../../tests-files';
+import { createAccount, axiosCreateAccountResponse } from '../../../tests-files';
 import * as _ from 'lodash';
 import AccountService from '../../../services/account';
 describe('Account service : create account', () => {
@@ -24,5 +24,17 @@ describe('Account service : create account', () => {
 
         // Assert
         expect(output).toBe(true);
+    });
+
+    it('should create account (all information is valid)', async () => {
+        // Arrange
+        const inputCreateAccount = createAccount;
+        spyOn(AccountService, 'createAccount').and.returnValue(Promise.resolve(axiosCreateAccountResponse));
+
+        // Act
+        const output: any = await AccountService.createAccount(inputCreateAccount);
+
+        // Assert
+        expect(output.data.id).toBeDefined();
     });
 });

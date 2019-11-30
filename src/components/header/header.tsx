@@ -7,7 +7,7 @@ import { useStyles } from './style';
 import useAuth from '../../contexts/auth';
 
 export function Header() {
-    let {
+    const {
         state: { user },
         dispatch,
     } = useAuth();
