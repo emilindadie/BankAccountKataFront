@@ -1,12 +1,11 @@
 import { IUser } from '../user/user.i';
-import { user } from '../../tests-files';
 
 export class CreateAccount {
     name!: string;
     user!: IUser;
 
     validProperty(): boolean {
-        if (this.name.length > 0 && user) {
+        if (this.name.length > 0 && this.user) {
             return true;
         }
         return false;

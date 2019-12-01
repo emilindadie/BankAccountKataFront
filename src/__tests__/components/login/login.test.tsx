@@ -49,7 +49,7 @@ describe('Login component', () => {
     it('Should call login service when the form is submitted', async () => {
         // Arrange
         const { getByTestId } = render(<Router><Login /></Router>);
-        const loginSpy = jest.spyOn(UserService, 'logUser').mockReturnValue(Promise.resolve(axiosUserResponse));
+        const loginSpy = jest.spyOn(UserService, 'logUser').mockResolvedValue(axiosUserResponse);
 
         await act(async () => {
             fireEvent.click(getByTestId('login_submit_btn'));

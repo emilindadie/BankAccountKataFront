@@ -28,7 +28,7 @@ export const axiosUserResponse: AxiosResponse<ApiResponse<LoginResponse>> = {
                 password: 'azerty',
                 address: '14 rue de mulhouse',
             },
-            token: 'azerty',
+            access_token: 'azerty',
         },
         error: 'Default error',
     },

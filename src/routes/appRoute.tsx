@@ -11,6 +11,7 @@ import Register from '../components/register/register';
 import { PrivateRoute } from './protected';
 import Home from '../components/home/home';
 import { Header } from '../components/header/header';
+import { PublicRoute } from './public';
 
 const AppRouter = (isAuthenticated: boolean) => (
     <BrowserRouter>
@@ -19,8 +20,8 @@ const AppRouter = (isAuthenticated: boolean) => (
             <Route exact path='/'>
                 <Redirect to='/login' />
             </Route>
-            <Route path='/login' component={Login} />
-            <Route component={Register} path='/register' />
+            <PublicRoute isAuthenticated={isAuthenticated} path='/login' component={Login} />
+            <PublicRoute isAuthenticated={isAuthenticated} path='/register' component={Register} />
             <PrivateRoute isAuthenticated={isAuthenticated} path='/home' component={Home} />
         </Switch>
     </BrowserRouter>

@@ -11,10 +11,10 @@ describe('Account service : get account', () => {
         // Arrange
         const inputUserId = 1;
 
-        const getSpy = jest.spyOn(AccountService, 'getAccountByuserId').mockReturnValue(Promise.resolve(axiosAccountByUserResponse));
+        const getSpy = jest.spyOn(AccountService, 'getAccountByUserId').mockResolvedValue(axiosAccountByUserResponse);
 
         // Act
-        const output: AxiosResponse<ApiResponse<IAccount[]>> = await AccountService.getAccountByuserId(inputUserId);
+        const output: AxiosResponse<ApiResponse<IAccount[]>> = await AccountService.getAccountByUserId(inputUserId);
 
         // Assert
         expect(output.data.data[0].id).toBeDefined();

@@ -33,7 +33,7 @@ describe('User service : create user', () => {
     it('should create user (all information is valid)', async () => {
         // Arrange
         const inputCreateUser = createUser;
-        const createSpy = jest.spyOn(UserService, 'createUser').mockReturnValue(Promise.resolve(axiosUserResponse));
+        const createSpy = jest.spyOn(UserService, 'createUser').mockResolvedValue(axiosUserResponse);
 
         // Act
         const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserService.createUser(inputCreateUser);

@@ -1,16 +1,14 @@
-
 import React from 'react';
-import Login from '../../../components/login/login';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
-import { axiosUserResponse } from '../../../tests-files';
-import UserService from '../../../services/user';
+import { axiosAccountByUserResponse, AuthContextMock } from '../../../tests-files';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Home from '../../../components/home/home';
+import AccountService from '../../../services/account';
+import * as authCtx from '../../../contexts/auth';
 
 Enzyme.configure({ adapter: new Adapter() });
-
 afterEach(cleanup);
 
 describe('Home component', () => {
@@ -19,14 +17,18 @@ describe('Home component', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('Should find 4 account', () => {
+    it('Should find 4 account', async () => {
         // Arrange
-        const { container } = render(<Router><Home /></Router>);
+        const useAuthSpy = jest.spyOn(authCtx, 'default').mockReturnValue(AuthContextMock);
+        const accountsSpy = jest.spyOn(AccountService, 'getAccountByUserId').mockResolvedValue(axiosAccountByUserResponse);
 
-        // Act
-        const field: any = container.querySelector('.account');
-
-        // Assert
-        expect(field.length.length).toBe(4);
+        await act(async () => {
+            // Act
+            const wrapper = mount(<Router><Home /></Router>);
+            wrapper.instance().forceUpdate();
+            wrapper.update();
+        });
+        expect(useAuthSpy).toHaveBeenCalled();
+        expect(accountsSpy).toHaveBeenCalled();
     });
 });

@@ -44,9 +44,10 @@ describe('Register component', () => {
     it('Should call create user service when the form is submitted', async () => {
         // Arrange
         const { getByTestId } = render(<Router><Register /></Router>);
-        const loginSpy = jest.spyOn(UserService, 'createUser').mockReturnValue(Promise.resolve(axiosUserResponse));
+        const loginSpy = jest.spyOn(UserService, 'createUser').mockResolvedValue(axiosUserResponse);
 
         await act(async () => {
+            // Act
             fireEvent.click(getByTestId('register_submit_btn'));
         });
 

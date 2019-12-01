@@ -1,8 +1,8 @@
 import { CreateAccount } from '../models/account/createAccount';
-import { Api } from '../api/axios';
 import { AxiosResponse } from 'axios';
 import { IAccount } from '../models/account/account.i';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
+import { Api } from '../api/axios';
 
 const AccountService = {
     validCreateAccountInformation(account: CreateAccount) {
@@ -26,7 +26,7 @@ const AccountService = {
         throw new Error('Email is not valid');
     },
 
-    async getAccountByuserId(userId: number): Promise<AxiosResponse<ApiResponse<IAccount[]>>> {
+    async getAccountByUserId(userId: number): Promise<AxiosResponse<ApiResponse<IAccount[]>>> {
         return await Api.getInstance().get('/account', { params: { userId } });
     },
 };

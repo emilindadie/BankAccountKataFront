@@ -33,7 +33,7 @@ describe('Account service : create account', () => {
         // Arrange
         const inputCreateAccount = createAccount;
         spyOn(AccountService, 'createAccount').and.returnValue(Promise.resolve(axiosCreateAccountResponse));
-        const createSpy = jest.spyOn(AccountService, 'createAccount').mockReturnValue(Promise.resolve(axiosCreateAccountResponse));
+        const createSpy = jest.spyOn(AccountService, 'createAccount').mockResolvedValue(axiosCreateAccountResponse);
 
         // Act
         const output: AxiosResponse<ApiResponse<IAccount>> = await AccountService.createAccount(inputCreateAccount);
@@ -43,7 +43,7 @@ describe('Account service : create account', () => {
         expect(createSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should not create user (invalid property)', async () => {
+    it('should not create account (invalid property)', async () => {
         // Arrange
         const inputCreateAccount = _.cloneDeep(createAccount);
         inputCreateAccount.user.email = '';
@@ -58,7 +58,7 @@ describe('Account service : create account', () => {
         }
     });
 
-    it('should not create user (invalid email type)', async () => {
+    it('should not create account (invalid email type)', async () => {
         // Arrange
         const inputCreateAccount = _.cloneDeep(createAccount);
         inputCreateAccount.user.email = 'dadie.emilin';

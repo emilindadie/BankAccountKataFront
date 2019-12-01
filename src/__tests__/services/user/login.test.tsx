@@ -35,7 +35,7 @@ describe('User service : log user', () => {
         // Arrange
         const inputEmail = 'dadie.emilin@gmail.com';
         const inputPassword = 'azerty';
-        const loginSpy = jest.spyOn(UserService, 'logUser').mockReturnValue(Promise.resolve(axiosUserResponse));
+        const loginSpy = jest.spyOn(UserService, 'logUser').mockResolvedValue(axiosUserResponse);
 
         // Act
         const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserService.logUser(inputEmail, inputPassword);

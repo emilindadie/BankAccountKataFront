@@ -1,9 +1,9 @@
-import { Api } from '../api/axios';
 import { CreateUser } from '../models/user/createUser';
 import { AxiosResponse } from 'axios';
 import { IUser } from '../models/user/user.i';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
 import { LoginResponse } from '../models/loginResponse/loginResponse';
+import { Api } from '../api/axios';
 
 const UserService = {
 

@@ -7,12 +7,11 @@ import { useStyles } from './style';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { setLocalStorage } from '../../utils';
-import { Api } from '../../api/axios';
 import { IUser } from '../../models/user/user.i';
 
 export function Login() {
     const {
-        state: { user },
+        state: { isAuthenticated, user },
         dispatch,
     } = useAuth();
     const history = useHistory();
@@ -29,7 +28,7 @@ export function Login() {
         try {
             const response = await UserService.logUser(email, password);
             if (response.data.data) {
-                const token = response.data.data.token;
+                const token = response.data.data.access_token;
                 const user = response.data.data.user;
                 updateAuthParams(user, token);
                 dispatch({ type: 'LOAD_USER', user: response.data.data.user });
@@ -44,10 +43,9 @@ export function Login() {
 
     function updateAuthParams(user: IUser, token: string) {
         setLocalStorage('isAuthenticated', JSON.stringify(true));
+        setLocalStorage('token', token);
         setLocalStorage('user', JSON.stringify(user));
-        Api.setToken(token);
     }
-
     return (
         <form className={classes.container} noValidate autoComplete='off' onSubmit={handleSubmit}>
             <div>

@@ -3,13 +3,16 @@ import './App.css';
 import { getLocalStorageValue } from './utils';
 import useAuth, { AuthProvider } from './contexts/auth';
 import AppRouter from './routes/appRoute';
+import { EventEmitter } from 'events';
 
 const App: React.FC = () => {
   let ignore = false;
   const {
-    state: { user, isAuthenticated },
+    state: { user },
     dispatch,
   } = useAuth();
+
+  const isAuthenticated = getLocalStorageValue('isAuthenticated');
 
   React.useEffect(() => {
     if (!user && isAuthenticated) {
@@ -31,7 +34,7 @@ const App: React.FC = () => {
   async function fetchUser() {
     const user = getLocalStorageValue('user');
     if (user && !ignore) {
-      dispatch({ type: 'LOAD_USER', user });
+      dispatch({ type: 'LOAD_USER', user: JSON.parse(user) });
     }
   }
 };
