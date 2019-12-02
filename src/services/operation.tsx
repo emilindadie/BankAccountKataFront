@@ -16,6 +16,10 @@ const OperationService = {
         }
         return await Api.getInstance().post('/operation', { accountId: operation.accountId, amount: operation.amount });
     },
+
+    getOperationByAccountId(accountId: number) {
+        return '';
+    },
 };
 
 export default OperationService;
