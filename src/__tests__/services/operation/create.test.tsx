@@ -1,10 +1,10 @@
 import React from 'react';
-import { createOperation, axiosCreateAccountResponse } from '../../../tests-files';
+import { createOperation, axiosCreateOperationResponse } from '../../../tests-files';
 import * as _ from 'lodash';
 import OperationService from '../../../services/operation';
 import { AxiosResponse } from 'axios';
-import { IAccount } from '../../../models/account/account.i';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
+import { IOperation } from '../../../models/operation/operation.i';
 describe('operatiob service : create operation', () => {
     it('should valid create operation information', () => {
         // Arrange
@@ -17,14 +17,16 @@ describe('operatiob service : create operation', () => {
         expect(output).toBe(true);
     });
 
-    it('should create operation', () => {
+    it('should create operation', async () => {
         // Arrange
         const inputCreateOperation = createOperation;
+        const createSpy = jest.spyOn(OperationService, 'createOperation').mockResolvedValue(axiosCreateOperationResponse);
 
         // Act
-        const output: any = OperationService.createOperation(inputCreateOperation);
+        const output: AxiosResponse<ApiResponse<IOperation>> = await OperationService.createOperation(inputCreateOperation);
 
         // Assert
-        expect(output.id).toBeDefined();
+        expect(createSpy).toHaveBeenCalledTimes(1);
+        expect(output.data.data.id).toBeDefined();
     });
 });

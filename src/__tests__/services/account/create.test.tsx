@@ -32,7 +32,6 @@ describe('Account service : create account', () => {
     it('should create account (all information is valid)', async () => {
         // Arrange
         const inputCreateAccount = createAccount;
-        spyOn(AccountService, 'createAccount').and.returnValue(Promise.resolve(axiosCreateAccountResponse));
         const createSpy = jest.spyOn(AccountService, 'createAccount').mockResolvedValue(axiosCreateAccountResponse);
 
         // Act
