@@ -26,6 +26,7 @@ export const useStyles = makeStyles(theme => ({
         margin: '0 auto',
         background: '#17479E',
         color: 'white',
+        cursor: 'pointer',
     },
     bullet: {
         display: 'inline-block',

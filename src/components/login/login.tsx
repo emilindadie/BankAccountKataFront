@@ -46,6 +46,14 @@ export function Login() {
         setLocalStorage('token', token);
         setLocalStorage('user', JSON.stringify(user));
     }
+
+    function disabledButton() {
+        if (email.length > 0 && password.length > 0 && email.match(new RegExp('\\@gmail.com|\\@yahoo.com|\\@hotmail.com|\\@hotmail.fr', 'g'))) {
+            return false;
+        }
+        return true;
+    }
+
     return (
         <form className={classes.container} noValidate autoComplete='off' onSubmit={handleSubmit}>
             <div>
@@ -74,7 +82,8 @@ export function Login() {
                 />
             </div>
             <div>
-                <Button data-testid='login_submit_btn' variant='contained' color='primary' id='submit_login_btn' className={classes.button} type='submit'>
+                <Button disabled={disabledButton()} data-testid='login_submit_btn' variant='contained' color='primary' id='submit_login_btn'
+                    className={classes.button} type='submit'>
                     CONNEXION
                 </Button>
             </div>

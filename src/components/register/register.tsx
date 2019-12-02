@@ -32,6 +32,13 @@ export function Register() {
         }
     };
 
+    function disabledButton() {
+        if (email.length > 0 && password.length > 0 && name.length > 0 && address.length > 0 && email.match(new RegExp('\\@gmail.com|\\@yahoo.com|\\@hotmail.com|\\@hotmail.fr', 'g'))) {
+            return false;
+        }
+        return true;
+    }
+
     return (
         <form className={classes.container} noValidate autoComplete='off'>
             <div>
@@ -80,7 +87,8 @@ export function Register() {
                 />
             </div>
             <div>
-                <Button data-testid='register_submit_btn' variant='contained' color='primary' className={classes.button} onClick={handleSubmit}>
+                <Button disabled={disabledButton()} data-testid='register_submit_btn' variant='contained' color='primary'
+                    className={classes.button} onClick={handleSubmit}>
                     Inscription
                 </Button>
             </div>

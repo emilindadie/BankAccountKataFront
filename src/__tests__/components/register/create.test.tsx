@@ -43,12 +43,21 @@ describe('Register component', () => {
 
     it('Should call create user service when the form is submitted', async () => {
         // Arrange
-        const { getByTestId } = render(<Router><Register /></Router>);
+        const { container, getByTestId } = render(<Router><Register /></Router>);
         const loginSpy = jest.spyOn(UserService, 'createUser').mockResolvedValue(axiosUserResponse);
 
+        const nameField: any = container.querySelector('#register_name_input');
+        const emailField: any = container.querySelector('#register_email_input');
+        const passwordField: any = container.querySelector('#register_password_input');
+        const addressField: any = container.querySelector('#register_address_input');
+
+        // Act
         await act(async () => {
-            // Act
-            fireEvent.click(getByTestId('register_submit_btn'));
+            await fireEvent.change(nameField, { target: { value: 'Emilin' } });
+            await fireEvent.change(emailField, { target: { value: 'dadie.emilin@gmail.com' } });
+            await fireEvent.change(passwordField, { target: { value: 'azerty' } });
+            await fireEvent.change(addressField, { target: { value: '14 rue de Mulhouse' } });
+            await fireEvent.click(getByTestId('register_submit_btn'));
         });
 
         // Assert

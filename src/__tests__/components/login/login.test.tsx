@@ -48,11 +48,16 @@ describe('Login component', () => {
 
     it('Should call login service when the form is submitted', async () => {
         // Arrange
-        const { getByTestId } = render(<Router><Login /></Router>);
+        const { container, getByTestId } = render(<Router><Login /></Router>);
         const loginSpy = jest.spyOn(UserService, 'logUser').mockResolvedValue(axiosUserResponse);
+        const passwordField: any = container.querySelector('#login_password_input');
+        const emailField: any = container.querySelector('#login_email_input');
 
+        // Act
         await act(async () => {
-            fireEvent.click(getByTestId('login_submit_btn'));
+            await fireEvent.change(emailField, { target: { value: 'dadie.emilin@gmail.com' } });
+            await fireEvent.change(passwordField, { target: { value: 'azerty' } });
+            await fireEvent.click(getByTestId('login_submit_btn'));
         });
 
         // Assert
