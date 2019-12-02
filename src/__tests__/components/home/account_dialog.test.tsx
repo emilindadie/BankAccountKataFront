@@ -22,7 +22,7 @@ describe('New account dialog in home component', () => {
             await fireEvent.click(getByTestId('open_new_account_dialog'));
 
             // Act
-            fireEvent.click(getByTestId('create_account_submit_btn'));
+            await fireEvent.click(getByTestId('create_account_submit_btn'));
 
             // Assert
             expect(createAccountsSpy).not.toHaveBeenCalled();

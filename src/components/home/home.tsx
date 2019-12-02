@@ -3,7 +3,7 @@ import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
 import AccountService from '../../services/account';
 import { IAccount } from '../../models/account/account.i';
-import { Fab, makeStyles, Button, Card, CardContent } from '@material-ui/core';
+import { Fab, Button, Card, CardContent } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -60,7 +60,7 @@ export function Home() {
     }
 
     return (
-        < div >
+        <div className={classes.homeContainer}>
             <h1 className={classes.title}>Bienvenue  {user!.name}</h1>
             {
                 accounts.map((account: IAccount, index) => (
@@ -74,7 +74,7 @@ export function Home() {
                     </div>
                 ))
             }
-            <Fab data-testid='open_new_account_dialog' color='primary' aria-label='add' className={classes.fab} onClick={handleClickOpen}>
+            <Fab color='primary' data-testid='open_new_account_dialog' aria-label='add' className={classes.fab} onClick={handleClickOpen}>
                 <AddIcon />
             </Fab>
             <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
@@ -83,22 +83,25 @@ export function Home() {
                     <DialogContentText>
                         Pour créer un nouveau compte bancaire, s'il vous plait taper votre nom de compte ci-dessous.
                     </DialogContentText>
-                    <TextField
-                        id='create_account_name_input'
-                        autoFocus
-                        margin='dense'
-                        label='Nom du compte'
-                        type='text'
-                        value={accountName}
-                        onChange={event => setAccountName(event.target.value)}
-                        fullWidth
-                    />
+                    <form noValidate autoComplete='off' onSubmit={saveAccount}>
+                        <TextField
+                            id='create_account_name_input'
+                            data-testid='create_account_name_input'
+                            autoFocus
+                            margin='dense'
+                            label='Nom du compte'
+                            name='accountName'
+                            value={accountName}
+                            onChange={event => setAccountName(event.target.value)}
+                            fullWidth
+                        />
+                    </form>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color='primary'>
                         Cancel
                     </Button>
-                    <Button data-testid='create_account_submit_btn' onClick={saveAccount} color='primary' disabled={!accountName}>
+                    <Button data-testid='create_account_submit_btn' type='submit' color='primary' disabled={!accountName}>
                         Créer
                     </Button>
                 </DialogActions>

@@ -1,6 +1,11 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
+    homeContainer: {
+        top: '65px',
+        position: 'absolute',
+        width: '100%',
+    },
     accountContainer: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -30,7 +35,7 @@ export const useStyles = makeStyles(theme => ({
     title: {
         fontSize: '30px',
         textAlign: 'center',
-        marginBottom: '130px',
+        marginBottom: '30px',
     },
     spanRight: {
         float: 'right',

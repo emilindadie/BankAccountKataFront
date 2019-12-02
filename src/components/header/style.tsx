@@ -9,6 +9,8 @@ export const useStyles = makeStyles(theme => ({
         background: 'white',
         color: '#333333',
         borderBottom: '2px solid #eee',
+        position: 'fixed',
+        top: 0,
     },
     isactive: {
         color: '#17479E',
