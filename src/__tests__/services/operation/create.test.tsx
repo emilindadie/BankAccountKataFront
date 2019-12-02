@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios';
 import { IAccount } from '../../../models/account/account.i';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 describe('operatiob service : create operation', () => {
-
     it('should valid create operation information', () => {
         // Arrange
         const inputCreateOperation = createOperation;
@@ -16,5 +15,16 @@ describe('operatiob service : create operation', () => {
 
         // Assert
         expect(output).toBe(true);
+    });
+
+    it('should create operation', () => {
+        // Arrange
+        const inputCreateOperation = createOperation;
+
+        // Act
+        const output: any = OperationService.createOperation(inputCreateOperation);
+
+        // Assert
+        expect(output.id).toBeDefined();
     });
 });
