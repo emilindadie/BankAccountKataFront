@@ -56,3 +56,35 @@ export const axiosCreateOperationResponse: AxiosResponse<ApiResponse<IOperation>
     status: 200,
     statusText: 'OK',
 };
+
+export const axiosOperationByAccountIdResponse: AxiosResponse<ApiResponse<IOperation[]>> = {
+    data: {
+        data: [
+            {
+                id: 1,
+                accountId: 1,
+                type: 'deposit',
+                account: {
+                    id: 1,
+                    name: 'Compte A',
+                    solde: 700,
+                    user: {
+                        id: 1,
+                        name: 'Emilin',
+                        email: 'dadie.emilin@gmail.com',
+                        password: 'azerty',
+                        address: '14 rue de mulhouse',
+                    },
+                },
+                amount: 600,
+                date: new Date(),
+            },
+        ],
+        error: 'Default error',
+    },
+    headers: [],
+    config: {},
+    request: [],
+    status: 200,
+    statusText: 'OK',
+};
