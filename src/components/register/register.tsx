@@ -29,7 +29,7 @@ export function Register() {
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                setCallback('Votre compte à été crée avec succes');
+                setCallback('Your account has been create with success');
             }
         } catch (error) {
             setError(error.message);
@@ -93,12 +93,12 @@ export function Register() {
             <div>
                 <Button disabled={disabledButton()} data-testid='register_submit_btn' variant='contained' color='primary'
                     className={classes.button} onClick={handleSubmit}>
-                    Inscription
+                    SignUp
                 </Button>
             </div>
             <div>
                 <li className={classes.list}>
-                    <Link to='/login'>Vous avez deja un compte?</Link>
+                    <Link to='/login'>You already have account?</Link>
                 </li>
             </div>
             <div className={classes.spanContainer}>

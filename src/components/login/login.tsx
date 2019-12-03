@@ -84,12 +84,12 @@ export function Login() {
             <div>
                 <Button disabled={disabledButton()} data-testid='login_submit_btn' variant='contained' color='primary' id='submit_login_btn'
                     className={classes.button} type='submit'>
-                    CONNEXION
+                    SignIn
                 </Button>
             </div>
             <div>
                 <li className={classes.list}>
-                    <Link to='/register'>Vous n'avez pas de compte?</Link>
+                    <Link to='/register'>You don't have account?</Link>
                 </li>
             </div>
             <div className={classes.spanContainer}>

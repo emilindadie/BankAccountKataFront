@@ -27,7 +27,6 @@ export function Operation(props: any) {
         setOperations(new Array<IOperation>());
         const fetchData = async () => {
             if (props!.location.state.account.id) {
-                console.log(props!.location.state.account.id);
                 try {
                     const operationsRes =
                         await OperationService.getOperationByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
@@ -45,7 +44,7 @@ export function Operation(props: any) {
     }, []);
     return (
         <div className={classes.operationContainer}>
-            <h1 className={classes.title}>Historique du compte : {props!.location.state.account.name} </h1>
+            <h1 className={classes.title}>Historical of account: {props!.location.state.account.name} </h1>
             <Paper className={classes.root}>
                 <Table className={classes.table} aria-label='simple table'>
                     <TableHead className={classes.tableHead}>
@@ -70,7 +69,7 @@ export function Operation(props: any) {
                 </Table>
             </Paper>
             <h3 className={classes.balance}>{
-                operations.length > 0 && balance !== 0 ? 'Balance du compte : ' + balance! + ' euro' : ''}</h3>
+                operations.length > 0 && balance !== 0 ? 'Balance of account : ' + balance! + ' €' : ''}</h3>
         </div>
     );
 }

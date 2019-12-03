@@ -28,15 +28,15 @@ export function Header() {
             <Toolbar>
                 <Button color='inherit'>
                     <Typography variant='h6' className={classes.menuItem}>
-                        <NavLink exact={false} activeClassName={classes.isactive} to='/home'>Consulter</NavLink>
+                        <NavLink exact={false} activeClassName={classes.isactive} to='/home'>Consult</NavLink>
                     </Typography>
                 </Button>
                 <Button color='inherit'>
                     <Typography variant='h6' className='ee'>
-                        <NavLink exact={true} activeClassName={classes.isactive} to='/manage'>Gérer</NavLink>
+                        <NavLink exact={true} activeClassName={classes.isactive} to='/manage'>Manage</NavLink>
                     </Typography>
                 </Button>
-                <Button color='inherit' className={classes.button} onClick={logOut}>Deconnexion</Button>
+                <Button color='inherit' className={classes.button} onClick={logOut}>Disconnect</Button>
             </Toolbar>
         </AppBar>
     );

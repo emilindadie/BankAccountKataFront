@@ -85,7 +85,7 @@ export function Manage() {
 
     return (
         <div className={classes.manageContainer}>
-            <h1 className={classes.title}>Bienvenue  {user!.name}</h1>
+            <h1 className={classes.title}>Welcome  {user!.name}</h1>
             <div className={classes.operationContainer}>
                 <Card id='withdraw_card_button' className={`${classes.card} ${getSelected('withdraw') ? classes.selectedCard : ''}`} onClick={
                     event => {
@@ -96,7 +96,7 @@ export function Manage() {
                     }
                 }>
                     <CardContent>
-                        <h3>Retrait</h3>
+                        <h3>WithDraw</h3>
                     </CardContent>
                 </Card>
                 <Card id='deposit_card_button' className={`${classes.card} ${getSelected('deposit') ? classes.selectedCard : ''}`} onClick={
@@ -108,13 +108,13 @@ export function Manage() {
                     }
                 }>
                     <CardContent>
-                        <h3>Depot</h3>
+                        <h3>Deposit</h3>
                     </CardContent>
                 </Card>
             </div>
             <div className={classes.accountsContainer}>
                 <form noValidate autoComplete='off' onSubmit={handleSubmit} className={classes.form}>
-                    <InputLabel id='demo-controlled-open-select-label'>Compte</InputLabel>
+                    <InputLabel id='demo-controlled-open-select-label'>Account</InputLabel>
                     {<Select className={classes.select}
                         labelId='demo-simple-select-label'
                         id='operation_account_select'
@@ -129,7 +129,7 @@ export function Manage() {
                         autoFocus
                         margin='dense'
                         id='operation_amount_input'
-                        label='Somme'
+                        label='Amount'
                         type='number'
                         value={amount}
                         onChange={event => setAmount(event.target.value)}
@@ -137,7 +137,7 @@ export function Manage() {
                     />
                     <Button id='operation_submit_button' disabled={disabledButton()} variant='contained' color='primary'
                         type='submit' className={classes.button}>
-                        {withdraw ? 'Retirer' : 'Deposer'}
+                        {withdraw ? 'WithDraw' : 'Deposit'}
                     </Button>
                 </form>
             </div>

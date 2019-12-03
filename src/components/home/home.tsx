@@ -68,7 +68,7 @@ export function Home() {
 
     return (
         <div className={classes.homeContainer}>
-            <h1 className={classes.title}>Bienvenue  {user!.name}</h1>
+            <h1 className={classes.title}>Welcome  {user!.name}</h1>
             {
                 accounts.map((account: IAccount, index) => (
                     <div className='account-row' key={index}>
@@ -86,17 +86,17 @@ export function Home() {
             </Fab>
             <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
                 <form noValidate autoComplete='off' onSubmit={saveAccount}>
-                    <DialogTitle id='form-dialog-title'>Création de compte</DialogTitle>
+                    <DialogTitle id='form-dialog-title'>Create account</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Pour créer un nouveau compte bancaire, s'il vous plait taper votre nom de compte ci-dessous.
+                            For create a new bank account, please taped account name below.
                     </DialogContentText>
                         <TextField
                             id='create_account_name_input'
                             data-testid='create_account_name_input'
                             autoFocus
                             margin='dense'
-                            label='Nom du compte'
+                            label='Account name'
                             name='accountName'
                             value={accountName}
                             onChange={event => setAccountName(event.target.value)}
@@ -108,7 +108,7 @@ export function Home() {
                             Cancel
                     </Button>
                         <Button data-testid='create_account_submit_btn' type='submit' color='primary' disabled={!accountName}>
-                            Créer
+                            Create
                     </Button>
                     </DialogActions>
                 </form>
