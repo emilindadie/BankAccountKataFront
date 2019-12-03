@@ -17,8 +17,8 @@ const OperationService = {
         return await Api.getInstance().post('/operation', { accountId: operation.accountId, amount: operation.amount });
     },
 
-    async getOperationByAccountId(accountId: number): Promise<AxiosResponse<ApiResponse<IOperation[]>>> {
-        return await Api.getInstance().get('/operation', { params: { accountId } });
+    async getOperationByAccountId(accountId: number, startDate?: Date, endDate?: Date, localDate?: Date): Promise<AxiosResponse<ApiResponse<IOperation[]>>> {
+        return await Api.getInstance().get('/operation', { params: { accountId, startDate, endDate, localDate } });
     },
 };
 

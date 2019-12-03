@@ -1,10 +1,9 @@
-import React from 'react';
 import { createOperation, axiosCreateOperationResponse } from '../../../tests-files';
-import * as _ from 'lodash';
 import OperationService from '../../../services/operation';
 import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 import { IOperation } from '../../../models/operation/operation.i';
+
 describe('operatiob service : create operation', () => {
     it('should valid create operation information', () => {
         // Arrange

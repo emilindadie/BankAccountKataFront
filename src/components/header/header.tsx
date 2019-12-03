@@ -28,7 +28,7 @@ export function Header() {
             <Toolbar>
                 <Button color='inherit'>
                     <Typography variant='h6' className={classes.menuItem}>
-                        <NavLink exact={true} activeClassName={classes.isactive} to='/home'>Consulter</NavLink>
+                        <NavLink exact={false} activeClassName={classes.isactive} to='/home'>Consulter</NavLink>
                     </Typography>
                 </Button>
                 <Button color='inherit'>

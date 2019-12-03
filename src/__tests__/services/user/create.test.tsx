@@ -1,8 +1,6 @@
-import React from 'react';
 import { axiosUserResponse, createUser } from '../../../tests-files';
 import * as _ from 'lodash';
 import UserService from '../../../services/user';
-import { IUser } from '../../../models/user/user.i';
 import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 import { LoginResponse } from '../../../models/loginResponse/loginResponse';

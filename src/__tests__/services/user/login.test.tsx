@@ -1,7 +1,5 @@
-import React from 'react';
-import { user, axiosUserResponse } from '../../../tests-files';
+import { axiosUserResponse } from '../../../tests-files';
 import UserService from '../../../services/user';
-import { IUser } from '../../../models/user/user.i';
 import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 import { LoginResponse } from '../../../models/loginResponse/loginResponse';

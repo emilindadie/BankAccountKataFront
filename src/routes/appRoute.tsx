@@ -13,6 +13,7 @@ import Home from '../components/home/home';
 import { Header } from '../components/header/header';
 import { PublicRoute } from './public';
 import { Manage } from '../components/manage/manage';
+import { Operation } from '../components/operation/operation';
 
 const AppRouter = (isAuthenticated: boolean) => (
     <BrowserRouter>
@@ -23,8 +24,9 @@ const AppRouter = (isAuthenticated: boolean) => (
             </Route>
             <PublicRoute isAuthenticated={isAuthenticated} path='/login' component={Login} />
             <PublicRoute isAuthenticated={isAuthenticated} path='/register' component={Register} />
-            <PrivateRoute isAuthenticated={isAuthenticated} path='/home' component={Home} />
+            <PrivateRoute isAuthenticated={isAuthenticated} exact path='/home' component={Home} />
             <PrivateRoute isAuthenticated={isAuthenticated} path='/manage' component={Manage} />
+            <PrivateRoute isAuthenticated={isAuthenticated} path='/home/:id/operation' component={Operation} />
         </Switch>
     </BrowserRouter>
 );

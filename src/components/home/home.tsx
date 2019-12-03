@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { CreateAccount } from '../../models/account/createAccount';
+import { useHistory } from 'react-router-dom';
 
 export function Home() {
     const {
@@ -24,6 +25,7 @@ export function Home() {
     const [canRequest, setCanRequest] = useState(true);
     const [open, setOpen] = React.useState(false);
     const [accountName, setAccountName] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,13 +61,17 @@ export function Home() {
         setOpen(false);
     }
 
+    const goToOperation = (account: IAccount) => {
+        history.push('home/' + Number(account.id) + '/operation', { account: account });
+    };
+
     return (
         <div className={classes.homeContainer}>
             <h1 className={classes.title}>Bienvenue  {user!.name}</h1>
             {
                 accounts.map((account: IAccount, index) => (
                     <div className='account-row' key={index}>
-                        <Card className={classes.card}>
+                        <Card className={classes.card} onClick={() => goToOperation(account)}>
                             <CardContent>
                                 <span>{account.name}</span>
                                 <span className={classes.spanRight}>{account.solde}  euro</span>
