@@ -11,7 +11,8 @@ describe('Account service : get account', () => {
         const getSpy = jest.spyOn(OperationService, 'getOperationByAccountId').mockResolvedValue(axiosOperationByAccountIdResponse);
 
         // Act
-        const output: AxiosResponse<ApiResponse<IOperation[]>> = await OperationService.getOperationByAccountId(inputAccountId, undefined, undefined, new Date());
+        const output: AxiosResponse<ApiResponse<IOperation[]>> =
+            await OperationService.getOperationByAccountId(inputAccountId, undefined, undefined, new Date());
 
         // Assert
         expect(output.data.data[0].id).toBeDefined();

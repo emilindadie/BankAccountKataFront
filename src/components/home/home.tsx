@@ -52,6 +52,7 @@ export function Home() {
     };
 
     async function saveAccount() {
+        console.log('called save');
         const createAccount = new CreateAccount();
         createAccount.user = user!;
         createAccount.name = accountName;
@@ -84,12 +85,12 @@ export function Home() {
                 <AddIcon />
             </Fab>
             <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-                <DialogTitle id='form-dialog-title'>Création de compte</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Pour créer un nouveau compte bancaire, s'il vous plait taper votre nom de compte ci-dessous.
+                <form noValidate autoComplete='off' onSubmit={saveAccount}>
+                    <DialogTitle id='form-dialog-title'>Création de compte</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Pour créer un nouveau compte bancaire, s'il vous plait taper votre nom de compte ci-dessous.
                     </DialogContentText>
-                    <form noValidate autoComplete='off' onSubmit={saveAccount}>
                         <TextField
                             id='create_account_name_input'
                             data-testid='create_account_name_input'
@@ -101,16 +102,16 @@ export function Home() {
                             onChange={event => setAccountName(event.target.value)}
                             fullWidth
                         />
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color='primary'>
-                        Cancel
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color='primary'>
+                            Cancel
                     </Button>
-                    <Button data-testid='create_account_submit_btn' type='submit' color='primary' disabled={!accountName}>
-                        Créer
+                        <Button data-testid='create_account_submit_btn' type='submit' color='primary' disabled={!accountName}>
+                            Créer
                     </Button>
-                </DialogActions>
+                    </DialogActions>
+                </form>
             </Dialog>
         </div >
     );

@@ -13,10 +13,12 @@ export function Register() {
     const [address, setAddress] = useState('');
     const [password, setPassord] = useState('');
     const [callback, setCallback] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setCallback('');
+        setError('');
         const createUser = new CreateUser();
         createUser.name = name;
         createUser.email = email;
@@ -24,11 +26,13 @@ export function Register() {
         createUser.address = address;
         try {
             const response = await UserService.createUser(createUser);
-            if (response.data) {
+            if (response.data.error) {
+                setError(response.data.error);
+            } else {
                 setCallback('Votre compte à été crée avec succes');
             }
         } catch (error) {
-            setCallback(error.message);
+            setError(error.message);
         }
     };
 
@@ -98,8 +102,11 @@ export function Register() {
                 </li>
             </div>
             <div className={classes.spanContainer}>
-                <span className={classes.span}>
+                <span className={classes.spanCallBack}>
                     {callback}
+                </span>
+                <span className={classes.spanError}>
+                    {error}
                 </span>
             </div>
         </form>

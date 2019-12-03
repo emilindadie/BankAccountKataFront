@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
-import { render, fireEvent, cleanup, act } from '@testing-library/react';
+import { cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
 import { axiosAccountByUserResponse, AuthContextMock } from '../../../tests-files';
 import { BrowserRouter as Router } from 'react-router-dom';

@@ -87,7 +87,7 @@ export function Manage() {
         <div className={classes.manageContainer}>
             <h1 className={classes.title}>Bienvenue  {user!.name}</h1>
             <div className={classes.operationContainer}>
-                <Card className={`${classes.card} ${getSelected('withdraw') ? classes.selectedCard : ''}`} onClick={
+                <Card id='withdraw_card_button' className={`${classes.card} ${getSelected('withdraw') ? classes.selectedCard : ''}`} onClick={
                     event => {
                         setAmount('');
                         setSelectedAccountId('');
@@ -99,7 +99,7 @@ export function Manage() {
                         <h3>Retrait</h3>
                     </CardContent>
                 </Card>
-                <Card className={`${classes.card} ${getSelected('deposit') ? classes.selectedCard : ''}`} onClick={
+                <Card id='deposit_card_button' className={`${classes.card} ${getSelected('deposit') ? classes.selectedCard : ''}`} onClick={
                     event => {
                         setAmount('');
                         setSelectedAccountId('');
@@ -117,7 +117,7 @@ export function Manage() {
                     <InputLabel id='demo-controlled-open-select-label'>Compte</InputLabel>
                     {<Select className={classes.select}
                         labelId='demo-simple-select-label'
-                        id='demo-simple-select'
+                        id='operation_account_select'
                         value={selectedAccountId}
                         onChange={(event: any) => setSelectedAccountId(event.target.value)}
                     >
@@ -128,14 +128,15 @@ export function Manage() {
                     <TextField
                         autoFocus
                         margin='dense'
-                        id='name'
+                        id='operation_amount_input'
                         label='Somme'
                         type='number'
                         value={amount}
                         onChange={event => setAmount(event.target.value)}
                         fullWidth
                     />
-                    <Button disabled={disabledButton()} variant='contained' color='primary' type='submit' className={classes.button}>
+                    <Button id='operation_submit_button' disabled={disabledButton()} variant='contained' color='primary'
+                        type='submit' className={classes.button}>
                         {withdraw ? 'Retirer' : 'Deposer'}
                     </Button>
                 </form>

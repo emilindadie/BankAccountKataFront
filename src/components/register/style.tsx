@@ -29,7 +29,10 @@ export const useStyles = makeStyles(theme => ({
         marginTop: '10px',
         textAlign: 'center',
     },
-    span: {
+    spanError: {
         color: 'red',
+    },
+    spanCallBack: {
+        color: 'green',
     },
 }));
