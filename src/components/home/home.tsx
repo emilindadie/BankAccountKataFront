@@ -75,7 +75,7 @@ export function Home() {
                         <Card className={classes.card} onClick={() => goToOperation(account)}>
                             <CardContent>
                                 <span>{account.name}</span>
-                                <span className={classes.spanRight}>{account.solde}  euro</span>
+                                <span className={classes.spanRight}>{account.solde}  €</span>
                             </CardContent>
                         </Card>
                     </div>
