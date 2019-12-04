@@ -69,7 +69,7 @@ export function Manage() {
             if (res.data.error) {
                 setError(res.data.error);
             } else {
-                setCallback('L\'operation a été réalisé avec succès');
+                setCallback('Operation has been done with success');
             }
         } catch (error) {
             setError(error.message);
