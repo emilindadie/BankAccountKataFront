@@ -17,7 +17,7 @@ const AccountService = {
     async createAccount(account: CreateAccount): Promise<AxiosResponse<ApiResponse<IAccount>>> {
         const validProperty = account.validProperty();
         if (!validProperty) {
-            throw new Error('Tous les champs sont obligatoires!');
+            throw new Error('All field is required!');
         }
         const valideEmailType = this.validEmailType(account.user.email);
         if (valideEmailType) {
