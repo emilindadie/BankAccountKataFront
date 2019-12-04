@@ -25,7 +25,7 @@ Think of your personal bank account experience When in doubt, go for the simples
 
 # Api Dependance
 
-[BankAccountkataApi](../BankAccountKataApi/README.md)
+[BankAccountkataApi](https://github.com/emilindadie/BankAccountKataApi)
 
 # Link to see the interface
 https://www.slideshare.net/secret/5VRmSQqnsNefsH
