@@ -61,7 +61,7 @@ export function Operation(props: any) {
                                     {operation.type}
                                 </TableCell>
                                 <TableCell align='right'>{moment(operation.date).format('MM/DD/YYYY')}</TableCell>
-                                <TableCell align='right'>{operation.amount}</TableCell>
+                                <TableCell align='right'>{operation.amount} €</TableCell>
                             </TableRow>
                         ))
                         }
