@@ -36,7 +36,7 @@ export function Header() {
                         <NavLink exact={true} activeClassName={classes.isactive} to='/manage'>Manage</NavLink>
                     </Typography>
                 </Button>
-                <Button color='inherit' className={classes.button} onClick={logOut}>Disconnect</Button>
+                <Button color='inherit' className={classes.button} onClick={logOut}>Logout</Button>
             </Toolbar>
         </AppBar>
     );
