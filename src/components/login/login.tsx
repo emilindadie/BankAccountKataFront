@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import useAuth from '../../contexts/auth';
 import { Button } from '@material-ui/core';
-import UserService from '../../services/user';
+import UserRepository from '../../repositories/user';
 import { useStyles } from './style';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
@@ -18,15 +18,23 @@ export function Login() {
 
     const classes = useStyles();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        error: '',
+    });
+
+    const {email, password, error} = formData;
+
+    const onChange = (e : any) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    } 
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        setError('');
+        setFormData({...formData, error: ''});
         try {
-            const response = await UserService.logUser(email, password);
+            const response = await UserRepository.logUser(email, password);
             if (response.data.data) {
                 const token = response.data.data.access_token;
                 const user = response.data.data.user;
@@ -34,10 +42,10 @@ export function Login() {
                 dispatch({ type: 'LOAD_USER', user: response.data.data.user });
                 history.push('/home');
             } else {
-                setError(response.data.error);
+                setFormData({...formData, error: response.data.error});
             }
         } catch (error) {
-            setError(error.message);
+            setFormData({...formData, error: error.message});
         }
     };
 
@@ -65,7 +73,7 @@ export function Login() {
                     variant='outlined'
                     name='email'
                     value={email}
-                    onChange={event => setEmail(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>
@@ -78,7 +86,7 @@ export function Login() {
                     type='password'
                     name='password'
                     value={password}
-                    onChange={event => setPassword(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import UserService from '../../services/user';
+import UserRepository from '../../repositories/user';
 import { CreateUser } from '../../models/user/createUser';
 import { useStyles } from './style';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ export function Register() {
         createUser.password = password;
         createUser.address = address;
         try {
-            const response = await UserService.createUser(createUser);
+            const response = await UserRepository.createUser(createUser);
             if (response.data.error) {
                 setError(response.data.error);
             } else {

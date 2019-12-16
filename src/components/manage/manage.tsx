@@ -4,10 +4,10 @@ import { Card, CardContent, MenuItem, Select, InputLabel, Button } from '@materi
 import TextField from '@material-ui/core/TextField';
 import './manage.css';
 import { useStyles } from './style';
-import AccountService from '../../services/account';
+import AccountService from '../../repositories/account';
 import { IAccount } from '../../models/account/account.i';
 import useAuth from '../../contexts/auth';
-import OperationService from '../../services/operation';
+import OperationRepository from '../../repositories/operation';
 import { CreateOperation } from '../../models/operation/createOperation';
 export function Manage() {
     const {
@@ -65,7 +65,7 @@ export function Manage() {
             const createOperation = new CreateOperation();
             createOperation.accountId = Number(selectedAccountId);
             createOperation.amount = Number(formatAmount);
-            const res = await OperationService.createOperation(createOperation);
+            const res = await OperationRepository.createOperation(createOperation);
             if (res.data.error) {
                 setError(res.data.error);
             } else {

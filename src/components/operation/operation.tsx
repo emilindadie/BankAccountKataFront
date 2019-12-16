@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
-import BalanceService from '../../services/balance';
+import BalanceService from '../../repositories/balance';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import OperationService from '../../services/operation';
+import OperationRepository from '../../repositories/operation';
 import { IOperation } from '../../models/operation/operation.i';
 import moment from 'moment';
 
@@ -29,7 +29,7 @@ export function Operation(props: any) {
             if (props!.location.state.account.id) {
                 try {
                     const operationsRes =
-                        await OperationService.getOperationByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
+                        await OperationRepository.getOperationByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
                     setOperations(operationsRes.data.data);
                     const balanceRes = await BalanceService.getBalanceByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
                     setBalance(balanceRes.data.data);

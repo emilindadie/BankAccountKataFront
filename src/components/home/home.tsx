@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
-import AccountService from '../../services/account';
+import AccountRepository from '../../repositories/account';
 import { IAccount } from '../../models/account/account.i';
 import { Fab, Button, Card, CardContent } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -31,7 +31,7 @@ export function Home() {
         const fetchData = async () => {
             if (user) {
                 try {
-                    const res = await AccountService.getAccountByUserId(Number(user.id));
+                    const res = await AccountRepository.getAccountByUserId(Number(user.id));
                     setAccounts(res.data.data);
                     setCanRequest(false);
                 } catch (e) { }
@@ -56,8 +56,8 @@ export function Home() {
         const createAccount = new CreateAccount();
         createAccount.user = user!;
         createAccount.name = accountName;
-        const saveAccount = await AccountService.createAccount(createAccount);
-        const accountsResponse = await AccountService.getAccountByUserId(Number(user!.id));
+        const saveAccount = await AccountRepository.createAccount(createAccount);
+        const accountsResponse = await AccountRepository.getAccountByUserId(Number(user!.id));
         setAccounts(accountsResponse.data.data);
         setOpen(false);
     }

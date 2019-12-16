@@ -4,7 +4,7 @@ import { IOperation } from '../models/operation/operation.i';
 import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
 
-const OperationService = {
+const OperationRepository = {
     validCreateOperationInformation(operation: CreateOperation) {
         return operation.validProperty();
     },
@@ -23,4 +23,4 @@ const OperationService = {
     },
 };
 
-export default OperationService;
+export default OperationRepository;

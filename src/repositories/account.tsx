@@ -4,7 +4,7 @@ import { IAccount } from '../models/account/account.i';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
 import { Api } from '../api/axios';
 
-const AccountService = {
+const AccountRepository = {
     validCreateAccountInformation(account: CreateAccount) {
         return account.validProperty();
     },
@@ -31,4 +31,4 @@ const AccountService = {
     },
 };
 
-export default AccountService;
+export default AccountRepository;

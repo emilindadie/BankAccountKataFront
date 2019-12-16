@@ -1,11 +1,10 @@
 import { CreateUser } from '../models/user/createUser';
 import { AxiosResponse } from 'axios';
-import { IUser } from '../models/user/user.i';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
 import { LoginResponse } from '../models/loginResponse/loginResponse';
 import { Api } from '../api/axios';
 
-const UserService = {
+const UserRepository = {
 
     validCreateUserInformation(user: CreateUser): boolean {
         return user.validProperty();
@@ -47,4 +46,4 @@ const UserService = {
     },
 };
 
-export default UserService;
+export default UserRepository;
