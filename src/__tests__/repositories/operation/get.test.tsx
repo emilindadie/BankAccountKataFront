@@ -1,18 +1,18 @@
 import { axiosOperationByAccountIdResponse } from '../../../tests-files';
-import OperationService from '../../../services/operation';
+import OperationRepository from '../../../repositories/operation';
 import { IOperation } from '../../../models/operation/operation.i';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 import { AxiosResponse } from 'axios';
 
-describe('Account service : get account', () => {
+describe('Account Repository : get account', () => {
     it('should get operations of one account (default get)', async () => {
         // Arrange
         const inputAccountId = 1;
-        const getSpy = jest.spyOn(OperationService, 'getOperationByAccountId').mockResolvedValue(axiosOperationByAccountIdResponse);
+        const getSpy = jest.spyOn(OperationRepository, 'getOperationByAccountId').mockResolvedValue(axiosOperationByAccountIdResponse);
 
         // Act
         const output: AxiosResponse<ApiResponse<IOperation[]>> =
-            await OperationService.getOperationByAccountId(inputAccountId, undefined, undefined, new Date());
+            await OperationRepository.getOperationByAccountId(inputAccountId, undefined, undefined, new Date());
 
         // Assert
         expect(output.data.data[0].id).toBeDefined();

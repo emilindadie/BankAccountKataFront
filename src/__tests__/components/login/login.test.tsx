@@ -5,7 +5,7 @@ import Enzyme, { shallow } from 'enzyme';
 import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
 import { axiosUserResponse } from '../../../tests-files';
-import UserService from '../../../services/user';
+import UserRepository from '../../../repositories/user';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -46,10 +46,10 @@ describe('Login component', () => {
         expect(field.value).toBe('azerty');
     });
 
-    it('Should call login service when the form is submitted', async () => {
+    it('Should call login Repository when the form is submitted', async () => {
         // Arrange
         const { container, getByTestId } = render(<Router><Login /></Router>);
-        const loginSpy = jest.spyOn(UserService, 'logUser').mockResolvedValue(axiosUserResponse);
+        const loginSpy = jest.spyOn(UserRepository, 'logUser').mockResolvedValue(axiosUserResponse);
         const passwordField: any = container.querySelector('#login_password_input');
         const emailField: any = container.querySelector('#login_email_input');
 

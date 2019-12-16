@@ -4,7 +4,7 @@ import { Card, CardContent, MenuItem, Select, InputLabel, Button } from '@materi
 import TextField from '@material-ui/core/TextField';
 import './manage.css';
 import { useStyles } from './style';
-import AccountService from '../../repositories/account';
+import AccountRepository from '../../repositories/account';
 import { IAccount } from '../../models/account/account.i';
 import useAuth from '../../contexts/auth';
 import OperationRepository from '../../repositories/operation';
@@ -28,7 +28,7 @@ export function Manage() {
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
-                const res = await AccountService.getAccountByUserId(Number(user.id));
+                const res = await AccountRepository.getAccountByUserId(Number(user.id));
                 setAccounts(res.data.data);
                 setCanRequest(false);
             }

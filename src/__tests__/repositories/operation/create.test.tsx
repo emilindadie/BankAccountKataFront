@@ -1,16 +1,16 @@
 import { createOperation, axiosCreateOperationResponse } from '../../../tests-files';
-import OperationService from '../../../services/operation';
+import OperationRepository from '../../../repositories/operation';
 import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 import { IOperation } from '../../../models/operation/operation.i';
 
-describe('operatiob service : create operation', () => {
+describe('operatiob Repository : create operation', () => {
     it('should valid create operation information', () => {
         // Arrange
         const inputCreateOperation = createOperation;
 
         // Act
-        const output = OperationService.validCreateOperationInformation(inputCreateOperation);
+        const output = OperationRepository.validCreateOperationInformation(inputCreateOperation);
 
         // Assert
         expect(output).toBe(true);
@@ -19,10 +19,10 @@ describe('operatiob service : create operation', () => {
     it('should create operation', async () => {
         // Arrange
         const inputCreateOperation = createOperation;
-        const createSpy = jest.spyOn(OperationService, 'createOperation').mockResolvedValue(axiosCreateOperationResponse);
+        const createSpy = jest.spyOn(OperationRepository, 'createOperation').mockResolvedValue(axiosCreateOperationResponse);
 
         // Act
-        const output: AxiosResponse<ApiResponse<IOperation>> = await OperationService.createOperation(inputCreateOperation);
+        const output: AxiosResponse<ApiResponse<IOperation>> = await OperationRepository.createOperation(inputCreateOperation);
 
         // Assert
         expect(createSpy).toHaveBeenCalledTimes(1);

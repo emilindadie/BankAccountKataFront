@@ -1,18 +1,18 @@
 import React from 'react';
 import { createAccount, axiosCreateAccountResponse } from '../../../tests-files';
 import * as _ from 'lodash';
-import AccountService from '../../../services/account';
+import AccountRepository from '../../../repositories/account';
 import { AxiosResponse } from 'axios';
 import { IAccount } from '../../../models/account/account.i';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
-describe('Account service : create account', () => {
+describe('Account Repository : create account', () => {
 
     it('should valid create account information', () => {
         // Arrange
         const inputCreateAccount = createAccount;
 
         // Act
-        const output = AccountService.validCreateAccountInformation(inputCreateAccount);
+        const output = AccountRepository.validCreateAccountInformation(inputCreateAccount);
 
         // Assert
         expect(output).toBe(true);
@@ -23,7 +23,7 @@ describe('Account service : create account', () => {
         const inputEmail = 'dadie.emilin@gmail.com';
 
         // Act
-        const output = AccountService.validEmailType(inputEmail);
+        const output = AccountRepository.validEmailType(inputEmail);
 
         // Assert
         expect(output).toBe(true);
@@ -32,10 +32,10 @@ describe('Account service : create account', () => {
     it('should create account (all information is valid)', async () => {
         // Arrange
         const inputCreateAccount = createAccount;
-        const createSpy = jest.spyOn(AccountService, 'createAccount').mockResolvedValue(axiosCreateAccountResponse);
+        const createSpy = jest.spyOn(AccountRepository, 'createAccount').mockResolvedValue(axiosCreateAccountResponse);
 
         // Act
-        const output: AxiosResponse<ApiResponse<IAccount>> = await AccountService.createAccount(inputCreateAccount);
+        const output: AxiosResponse<ApiResponse<IAccount>> = await AccountRepository.createAccount(inputCreateAccount);
 
         // Assert
         expect(output.data.data.id).toBeDefined();
@@ -50,7 +50,7 @@ describe('Account service : create account', () => {
 
         // Act
         try {
-            const output: AxiosResponse<ApiResponse<IAccount>> = await AccountService.createAccount(inputCreateAccount);
+            const output: AxiosResponse<ApiResponse<IAccount>> = await AccountRepository.createAccount(inputCreateAccount);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);
@@ -64,7 +64,7 @@ describe('Account service : create account', () => {
 
         // Act
         try {
-            const output: AxiosResponse<ApiResponse<IAccount>> = await AccountService.createAccount(inputCreateAccount);
+            const output: AxiosResponse<ApiResponse<IAccount>> = await AccountRepository.createAccount(inputCreateAccount);
         } catch (e) {
             // Assert
             expect(e).toBeInstanceOf(Error);

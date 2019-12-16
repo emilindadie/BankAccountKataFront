@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
-import BalanceService from '../../repositories/balance';
+import BalanceRepository from '../../repositories/balance';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -31,7 +31,7 @@ export function Operation(props: any) {
                     const operationsRes =
                         await OperationRepository.getOperationByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
                     setOperations(operationsRes.data.data);
-                    const balanceRes = await BalanceService.getBalanceByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
+                    const balanceRes = await BalanceRepository.getBalanceByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
                     setBalance(balanceRes.data.data);
                     setCanRequest(false);
                 } catch (e) { }

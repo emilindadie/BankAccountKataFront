@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { axiosAccountByUserResponse, AuthContextMock } from '../../../tests-files';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Home from '../../../components/home/home';
-import AccountService from '../../../services/account';
+import AccountRepository from '../../../repositories/account';
 import * as authCtx from '../../../contexts/auth';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -20,7 +20,7 @@ describe('Home component', () => {
     it('Should find 4 account', async () => {
         // Arrange
         const useAuthSpy = jest.spyOn(authCtx, 'default').mockReturnValue(AuthContextMock);
-        const accountsSpy = jest.spyOn(AccountService, 'getAccountByUserId').mockResolvedValue(axiosAccountByUserResponse);
+        const accountsSpy = jest.spyOn(AccountRepository, 'getAccountByUserId').mockResolvedValue(axiosAccountByUserResponse);
 
         await act(async () => {
             // Act
