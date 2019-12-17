@@ -26,4 +26,7 @@ export const useStyles = makeStyles(theme => ({
     balance: {
         float: 'right',
     },
+    search: {
+        marginBottom: '30px',
+    },
 }));

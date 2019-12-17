@@ -11,8 +11,10 @@ import Paper from '@material-ui/core/Paper';
 import OperationRepository from '../../repositories/operation';
 import { IOperation } from '../../models/operation/operation.i';
 import moment from 'moment';
+import { Search } from './search';
 
 export function Operation(props: any) {
+
     const {
         state: { isAuthenticated, user },
         dispatch,
@@ -27,14 +29,8 @@ export function Operation(props: any) {
         setOperations(new Array<IOperation>());
         const fetchData = async () => {
             if (props!.location.state.account.id) {
-                try {
-                    const operationsRes =
-                        await OperationRepository.getOperationByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
-                    setOperations(operationsRes.data.data);
-                    const balanceRes = await BalanceRepository.getBalanceByAccountId(props!.location.state.account.id, undefined, undefined, new Date());
-                    setBalance(balanceRes.data.data);
-                    setCanRequest(false);
-                } catch (e) { }
+                await getOperations(props!.location.state.account.id, undefined, undefined, new Date());
+                setCanRequest(false);
             }
         };
 
@@ -42,9 +38,33 @@ export function Operation(props: any) {
             fetchData();
         }
     }, []);
+
+    const handleSearch = async (event: any, startDate : Date, endDate : Date) => {
+        event.preventDefault();
+        await getOperations(props!.location.state.account.id, startDate, endDate, undefined);
+    };
+
+
+    async function getOperations(id : number, startDate? : Date, endDate? : Date, currentDate? : Date) {
+        try {
+            const operationsRes =
+            await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
+            if (operationsRes.data.data) {
+                setOperations(operationsRes.data.data);
+            }
+            const balanceRes = await BalanceRepository.getBalanceByAccountId(id, startDate, endDate, currentDate);
+            if (balanceRes.data.data) {
+                setBalance(balanceRes.data.data);
+            }
+        } catch (e) { }
+    }
+
     return (
         <div className={classes.operationContainer}>
             <h1 className={classes.title}>Historical of account: {props!.location.state.account.name} </h1>
+            <div className={classes.search}>
+                    <Search handleSearch={handleSearch}/>
+            </div>
             <Paper className={classes.root}>
                 <Table className={classes.table} aria-label='simple table'>
                     <TableHead className={classes.tableHead}>

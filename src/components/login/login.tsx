@@ -28,7 +28,7 @@ export function Login() {
 
     const onChange = (e : any) => {
         setFormData({...formData, [e.target.name]: e.target.value});
-    } 
+    }; 
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
