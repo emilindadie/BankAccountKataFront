@@ -4,7 +4,7 @@ import Enzyme, { shallow, mount } from 'enzyme';
 import { cleanup } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Manage } from '../../../components/manage/manage';
+import Manage from '../../../components/manage/manage';
 
 Enzyme.configure({ adapter: new Adapter() });
 

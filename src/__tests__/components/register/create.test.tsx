@@ -3,10 +3,10 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import { render, fireEvent, cleanup, act } from '@testing-library/react';
 import Adapter from 'enzyme-adapter-react-16';
-import Register from '../../../components/register/register';
 import UserRepository from '../../../repositories/user';
 import { axiosUserResponse } from '../../../tests-files';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Register } from '../../../components/register/register';
 
 Enzyme.configure({ adapter: new Adapter() });
 

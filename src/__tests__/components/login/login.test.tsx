@@ -7,20 +7,40 @@ import Adapter from 'enzyme-adapter-react-16';
 import { axiosUserResponse } from '../../../tests-files';
 import UserRepository from '../../../repositories/user';
 import { BrowserRouter as Router } from 'react-router-dom';
-
+import { Provider } from 'react-redux';
 Enzyme.configure({ adapter: new Adapter() });
+import configureStore from 'redux-mock-store';
 
 afterEach(cleanup);
 
 describe('Login component', () => {
+    let store: any;
+    const mockStore = configureStore([]);
+
+    beforeEach(() => {
+        store = mockStore({isAuthenticated : false, user : null});
+    });
+
     it('renders', () => {
-        const wrapper = shallow(<Router><Login /></Router>);
+        const wrapper = shallow(
+            <Provider store={store}>
+                <Router>
+                    <Login />
+                </Router>
+            </Provider>,
+        );
         expect(wrapper.exists()).toBe(true);
     });
 
     it('Should change the state of email input', () => {
         // Arrange
-        const { container } = render(<Router><Login /></Router>);
+        const { container } = render(
+            <Provider store={store}>
+                <Router>
+                    <Login />
+                </Router>
+            </Provider>,
+        );
         const field: any = container.querySelector('#login_email_input');
 
         // Act
@@ -34,7 +54,13 @@ describe('Login component', () => {
 
     it('Should change the state of password input', () => {
         // Arrange
-        const { container } = render(<Router><Login /></Router>);
+        const { container } = render(
+            <Provider store={store}>
+                <Router>
+                    <Login />
+                </Router>
+            </Provider>,
+        );
         const field: any = container.querySelector('#login_password_input');
 
         // Act
@@ -48,7 +74,13 @@ describe('Login component', () => {
 
     it('Should call login Repository when the form is submitted', async () => {
         // Arrange
-        const { container, getByTestId } = render(<Router><Login /></Router>);
+        const { container, getByTestId } = render(
+            <Provider store={store}>
+                <Router>
+                    <Login />
+                </Router>
+            </Provider>,
+        );
         const loginSpy = jest.spyOn(UserRepository, 'logUser').mockResolvedValue(axiosUserResponse);
         const passwordField: any = container.querySelector('#login_password_input');
         const emailField: any = container.querySelector('#login_email_input');

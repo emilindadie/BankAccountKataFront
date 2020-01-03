@@ -6,29 +6,44 @@ import { axiosAccountByUserResponse, AuthContextMock } from '../../../tests-file
 import { BrowserRouter as Router } from 'react-router-dom';
 import Home from '../../../components/home/home';
 import AccountRepository from '../../../repositories/account';
-import * as authCtx from '../../../contexts/auth';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 
 Enzyme.configure({ adapter: new Adapter() });
 afterEach(cleanup);
 
 describe('Home component', () => {
+    let store: any;
+    const mockStore = configureStore([]);
+
+    beforeEach(() => {
+        store = mockStore({isAuthenticated : true, user : {id: 1}});
+    });
+
     it('renders', () => {
-        const wrapper = shallow(<Router><Home /></Router>);
+        const wrapper = shallow(<Provider store={store}>
+            <Router>
+                <Home />
+            </Router>
+        </Provider>,
+        );
         expect(wrapper.exists()).toBe(true);
     });
 
     it('Should find 4 account', async () => {
         // Arrange
-        const useAuthSpy = jest.spyOn(authCtx, 'default').mockReturnValue(AuthContextMock);
         const accountsSpy = jest.spyOn(AccountRepository, 'getAccountByUserId').mockResolvedValue(axiosAccountByUserResponse);
 
         await act(async () => {
             // Act
-            const wrapper = mount(<Router><Home /></Router>);
-            wrapper.instance().forceUpdate();
+            const wrapper = mount(<Provider store={store}>
+                <Router>
+                    <Home />
+                </Router>
+            </Provider>,
+            );
             wrapper.update();
         });
-        expect(useAuthSpy).toHaveBeenCalled();
         expect(accountsSpy).toHaveBeenCalled();
     });
 });
