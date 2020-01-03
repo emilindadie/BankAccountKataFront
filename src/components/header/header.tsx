@@ -1,22 +1,18 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import './header.css';
 import { useStyles } from './style';
-import useAuth from '../../contexts/auth';
+import { connect } from 'react-redux';
+import { AuthState, AuthAction } from '../../reducers/auth';
 
-export function Header() {
-    const {
-        state: { user },
-        dispatch,
-    } = useAuth();
-
+function Header(props: any) {
     const history = useHistory();
     const classes = useStyles();
 
     function logOut() {
-        dispatch({ type: 'LOGOUT' });
+        props.dispatch({ type: 'LOGOUT' });
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('isAuthenticated');
@@ -41,3 +37,15 @@ export function Header() {
         </AppBar>
     );
 }
+
+const mapStateToProps = (state: AuthState) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+    return {
+        dispatch: (action: AuthAction) => dispatch(action),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

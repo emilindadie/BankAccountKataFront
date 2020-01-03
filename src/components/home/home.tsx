@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
 import AccountRepository from '../../repositories/account';
 import { IAccount } from '../../models/account/account.i';
@@ -13,13 +12,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { CreateAccount } from '../../models/account/createAccount';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { AuthState, AuthAction } from '../../reducers/auth';
 
-export function Home() {
-    const {
-        state: { isAuthenticated, user },
-        dispatch,
-    } = useAuth();
-
+function Home(props: any) {
     const classes = useStyles();
     const [accounts, setAccounts] = useState(new Array<IAccount>());
     const [canRequest, setCanRequest] = useState(true);
@@ -29,9 +25,9 @@ export function Home() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (user) {
+            if (props.state.user) {
                 try {
-                    const res = await AccountRepository.getAccountByUserId(Number(user.id));
+                    const res = await AccountRepository.getAccountByUserId(Number(props.state.user.id));
                     setAccounts(res.data.data);
                     setCanRequest(false);
                 } catch (e) { }
@@ -40,7 +36,7 @@ export function Home() {
         if (canRequest) {
             fetchData();
         }
-    }, []);
+    }, [props.state.user]);
 
     const handleClickOpen = () => {
         setAccountName('');
@@ -52,23 +48,22 @@ export function Home() {
     };
 
     async function saveAccount() {
-        console.log('called save');
         const createAccount = new CreateAccount();
-        createAccount.user = user!;
+        createAccount.user = props.state.user!;
         createAccount.name = accountName;
         const saveAccount = await AccountRepository.createAccount(createAccount);
-        const accountsResponse = await AccountRepository.getAccountByUserId(Number(user!.id));
+        const accountsResponse = await AccountRepository.getAccountByUserId(Number(props.state.user!.id));
         setAccounts(accountsResponse.data.data);
         setOpen(false);
     }
 
     const goToOperation = (account: IAccount) => {
-        history.push('home/' + Number(account.id) + '/operation', { account: account });
+        history.push('home/' + Number(account.id) + '/operation', { account });
     };
 
     return (
         <div className={classes.homeContainer}>
-            <h1 className={classes.title}>Welcome  {user!.name}</h1>
+            <h1 className={classes.title}>Welcome  {props.state.user!.name}</h1>
             {
                 accounts.map((account: IAccount, index) => (
                     <div className='account-row' key={index}>
@@ -117,4 +112,14 @@ export function Home() {
     );
 }
 
-export default Home;
+const mapStateToProps = (state: AuthState) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+    return {
+        dispatch: (action: AuthAction) => dispatch(action),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

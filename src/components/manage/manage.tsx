@@ -6,14 +6,12 @@ import './manage.css';
 import { useStyles } from './style';
 import AccountRepository from '../../repositories/account';
 import { IAccount } from '../../models/account/account.i';
-import useAuth from '../../contexts/auth';
 import OperationRepository from '../../repositories/operation';
 import { CreateOperation } from '../../models/operation/createOperation';
-export function Manage() {
-    const {
-        state: { user },
-    } = useAuth();
+import { connect } from 'react-redux';
+import { AuthState, AuthAction } from '../../reducers/auth';
 
+function Manage(props: any) {
     const [accounts, setAccounts] = useState(new Array<IAccount>());
     const [canRequest, setCanRequest] = useState(true);
     const [selectedAccountId, setSelectedAccountId] = useState('');
@@ -27,8 +25,8 @@ export function Manage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (user) {
-                const res = await AccountRepository.getAccountByUserId(Number(user.id));
+            if (props.state.user) {
+                const res = await AccountRepository.getAccountByUserId(Number(props.state.user.id));
                 setAccounts(res.data.data);
                 setCanRequest(false);
             }
@@ -85,7 +83,7 @@ export function Manage() {
 
     return (
         <div className={classes.manageContainer}>
-            <h1 className={classes.title}>Welcome  {user!.name}</h1>
+            <h1 className={classes.title}>Welcome  {props.state.user!.name}</h1>
             <div className={classes.operationContainer}>
                 <Card id='withdraw_card_button' className={`${classes.card} ${getSelected('withdraw') ? classes.selectedCard : ''}`} onClick={
                     event => {
@@ -152,3 +150,15 @@ export function Manage() {
         </div >
     );
 }
+
+const mapStateToProps = (state: AuthState) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+    return {
+        dispatch: (action: AuthAction) => dispatch(action),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Manage);

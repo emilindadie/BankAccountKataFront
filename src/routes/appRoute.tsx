@@ -7,13 +7,13 @@ import {
     Redirect,
 } from 'react-router-dom';
 import Login from '../components/login/login';
-import Register from '../components/register/register';
 import { PrivateRoute } from './protected';
 import Home from '../components/home/home';
-import { Header } from '../components/header/header';
+import Header from '../components/header/header';
 import { PublicRoute } from './public';
-import { Manage } from '../components/manage/manage';
-import { Operation } from '../components/operation/operation';
+import { Register } from '../components/register/register';
+import Manage from '../components/manage/manage';
+import Operation from '../components/operation/operation';
 
 const AppRouter = (isAuthenticated: boolean) => (
     <BrowserRouter>

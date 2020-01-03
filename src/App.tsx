@@ -1,29 +1,24 @@
 import React from 'react';
 import './App.css';
-import { getLocalStorageValue } from './utils';
-import useAuth, { AuthProvider } from './contexts/auth';
 import AppRouter from './routes/appRoute';
-import { EventEmitter } from 'events';
+import { getLocalStorageValue } from './utils';
+import { AuthState, AuthAction } from './reducers/auth';
+import { connect } from 'react-redux';
 
-const App: React.FC = () => {
+const App: React.FC = (props: any) => {
   let ignore = false;
-  const {
-    state: { user },
-    dispatch,
-  } = useAuth();
 
   const isAuthenticated = getLocalStorageValue('isAuthenticated');
-
   React.useEffect(() => {
-    if (!user && isAuthenticated) {
+    if (!props.state.user && isAuthenticated) {
       fetchUser();
     }
     return () => {
       ignore = true;
     };
-  }, [dispatch, isAuthenticated, user]);
+}, [props.dispatch, isAuthenticated, props.state.user]);
 
-  if (!user && isAuthenticated) {
+  if (!props.state.user && isAuthenticated) {
     return null;
   }
 
@@ -32,15 +27,21 @@ const App: React.FC = () => {
   );
 
   async function fetchUser() {
-    const user = getLocalStorageValue('user');
-    if (user && !ignore) {
-      dispatch({ type: 'LOAD_USER', user: JSON.parse(user) });
+    if (!ignore) {
+      const user = getLocalStorageValue('user');
+      props.dispatch({ type: 'LOAD_USER', user: JSON.parse(user) });
     }
   }
 };
 
-export default () => (
-  <AuthProvider>
-    <App />
-  </AuthProvider>
-);
+const mapStateToProps = (state: AuthState) => {
+  return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+  return {
+    dispatch: (action: AuthAction) => dispatch(action),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

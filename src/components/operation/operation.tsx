@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import useAuth from '../../contexts/auth';
 import { useStyles } from './style';
 import BalanceRepository from '../../repositories/balance';
 import Table from '@material-ui/core/Table';
@@ -12,14 +11,10 @@ import OperationRepository from '../../repositories/operation';
 import { IOperation } from '../../models/operation/operation.i';
 import moment from 'moment';
 import { Search } from './search';
+import { connect } from 'react-redux';
+import { AuthState, AuthAction } from '../../reducers/auth';
 
-export function Operation(props: any) {
-
-    const {
-        state: { isAuthenticated, user },
-        dispatch,
-    } = useAuth();
-
+function Operation(props: any) {
     const [canRequest, setCanRequest] = useState(true);
     const [balance, setBalance] = useState(0);
     const [operations, setOperations] = useState(new Array<IOperation>());
@@ -39,13 +34,12 @@ export function Operation(props: any) {
         }
     }, []);
 
-    const handleSearch = async (event: any, startDate : Date, endDate : Date) => {
+    const handleSearch = async (event: any, startDate: Date, endDate: Date) => {
         event.preventDefault();
         await getOperations(props!.location.state.account.id, startDate, endDate, undefined);
     };
 
-
-    async function getOperations(id : number, startDate? : Date, endDate? : Date, currentDate? : Date) {
+    async function getOperations(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         try {
             const operationsRes =
             await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
@@ -93,3 +87,15 @@ export function Operation(props: any) {
         </div>
     );
 }
+
+const mapStateToProps = (state: AuthState) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+    return {
+        dispatch: (action: AuthAction) => dispatch(action),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Operation);

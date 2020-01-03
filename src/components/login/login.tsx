@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
-import useAuth from '../../contexts/auth';
 import { Button } from '@material-ui/core';
 import UserRepository from '../../repositories/user';
 import { useStyles } from './style';
@@ -8,16 +7,12 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { setLocalStorage } from '../../utils';
 import { IUser } from '../../models/user/user.i';
+import { connect } from 'react-redux';
+import { AuthAction, AuthState } from '../../reducers/auth';
 
-export function Login() {
-    const {
-        state: { isAuthenticated, user },
-        dispatch,
-    } = useAuth();
+function Login(props: any) {
     const history = useHistory();
-
     const classes = useStyles();
-
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -25,10 +20,9 @@ export function Login() {
     });
 
     const {email, password, error} = formData;
-
-    const onChange = (e : any) => {
+    const onChange = (e: any) => {
         setFormData({...formData, [e.target.name]: e.target.value});
-    }; 
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -39,7 +33,7 @@ export function Login() {
                 const token = response.data.data.access_token;
                 const user = response.data.data.user;
                 updateAuthParams(user, token);
-                dispatch({ type: 'LOAD_USER', user: response.data.data.user });
+                props.dispatch({ type: 'LOAD_USER', user: response.data.data.user });
                 history.push('/home');
             } else {
                 setFormData({...formData, error: response.data.error});
@@ -109,4 +103,14 @@ export function Login() {
     );
 }
 
-export default Login;
+const mapStateToProps = (state: AuthState) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch: React.Dispatch<AuthAction>) => {
+    return {
+        dispatch: (action: AuthAction) => dispatch(action),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -112,5 +112,3 @@ export function Register() {
         </form>
     );
 }
-
-export default Register;
