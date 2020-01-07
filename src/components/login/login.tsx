@@ -37,12 +37,9 @@ function Login(props: any) {
                 props.dispatch({ type: 'LOAD_USER', user: response.data.data.user });
                 history.push('/home');
             } else {
-                console.log(response);
                 setFormData({...formData, error: response.data.error.message});
             }
         } catch (error) {
-            
-            console.log(error);
             setFormData({...formData, error: error.message});
         }
     };
