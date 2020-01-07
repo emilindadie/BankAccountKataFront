@@ -61,6 +61,7 @@ function Operation(props: any) {
     async function getOperationByAccountId(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         try {
             const operationsRes = await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
+            console.log(operationsRes);
             if (operationsRes.data.data) {
                 setOperations(operationsRes.data.data);
             }
