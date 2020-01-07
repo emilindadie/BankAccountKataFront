@@ -1,13 +1,13 @@
 
-import axios, { AxiosInstance } from 'axios';
-import { getLocalStorageValue } from '../utils';
+import axios from 'axios';
+import { getCookieValue } from '../utils';
 
 export class Api {
     static getInstance() {
         return axios.create({
             baseURL: 'http://localhost:3001',
             headers: {
-                Authorization: 'bearer ' + getLocalStorageValue('token'),
+                Authorization: 'bearer ' + getCookieValue('access_token'),
             },
         });
     }

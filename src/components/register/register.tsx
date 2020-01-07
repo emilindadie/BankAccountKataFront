@@ -27,7 +27,7 @@ export function Register() {
         try {
             const response = await UserRepository.createUser(createUser);
             if (response.data.error) {
-                setError(response.data.error);
+                setError(response.data.error.message);
             } else {
                 setCallback('Your account has been create with success');
             }

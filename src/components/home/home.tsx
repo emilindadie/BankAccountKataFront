@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStyles } from './style';
 import AccountRepository from '../../repositories/account';
+import CommonFunction from '../../common/common';
 import { IAccount } from '../../models/account/account.i';
 import { Fab, Button, Card, CardContent } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,17 +27,62 @@ function Home(props: any) {
     useEffect(() => {
         const fetchData = async () => {
             if (props.state.user) {
-                try {
-                    const res = await AccountRepository.getAccountByUserId(Number(props.state.user.id));
-                    setAccounts(res.data.data);
-                    setCanRequest(false);
-                } catch (e) { }
+                 await getAccountsHandler(Number(props.state.user.id));
             }
         };
         if (canRequest) {
             fetchData();
         }
     }, [props.state.user]);
+
+    async function getAccountsHandler(userId: any) {
+        let hasData = false;
+        while (!hasData) {
+            let error: any = await getAccountByUserId(userId);
+            if (error && error.message === 'Request failed with status code 401') {
+                error = await CommonFunction.getNewToken();
+                if (error && error.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+            } else {
+                hasData = true;
+            }
+        }
+    }
+
+    async function getAccountByUserId(userId: number) {
+        try {
+            const res = await AccountRepository.getAccountByUserId(userId);
+            setAccounts(res.data.data);
+            setCanRequest(false);
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async function saveAccountHandler(createAccount: CreateAccount) {
+        let hasSave = false;
+        while (!hasSave) {
+            let saveAccountError: any = saveAccount(createAccount);
+            if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+                saveAccountError = await CommonFunction.getNewToken();
+                if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+                hasSave = true;
+            } else {
+                hasSave = true;
+            }
+        }
+    }
+
+    async function saveAccount(createAccount: CreateAccount) {
+        try {
+            const saveAccountResponse = await AccountRepository.createAccount(createAccount);
+        } catch (e) {
+            return e;
+        }
+    }
 
     const handleClickOpen = () => {
         setAccountName('');
@@ -47,14 +93,12 @@ function Home(props: any) {
         setOpen(false);
     };
 
-    async function saveAccount() {
+    async function save() {
         const createAccount = new CreateAccount();
         createAccount.user = props.state.user!;
         createAccount.name = accountName;
-        const saveAccount = await AccountRepository.createAccount(createAccount);
-        const accountsResponse = await AccountRepository.getAccountByUserId(Number(props.state.user!.id));
-        setAccounts(accountsResponse.data.data);
-        setOpen(false);
+        saveAccountHandler(createAccount);
+        getAccountsHandler(Number(props.state.user.id));
     }
 
     const goToOperation = (account: IAccount) => {
@@ -80,7 +124,7 @@ function Home(props: any) {
                 <AddIcon />
             </Fab>
             <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-                <form noValidate autoComplete='off' onSubmit={saveAccount}>
+                <form noValidate autoComplete='off' onSubmit={save}>
                     <DialogTitle id='form-dialog-title'>Create account</DialogTitle>
                     <DialogContent>
                         <DialogContentText>

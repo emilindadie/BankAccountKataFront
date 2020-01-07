@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import { Card, CardContent, MenuItem, Select, InputLabel, Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import './manage.css';
@@ -10,6 +9,8 @@ import OperationRepository from '../../repositories/operation';
 import { CreateOperation } from '../../models/operation/createOperation';
 import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
+import { useHistory } from 'react-router-dom';
+import CommonFunction from '../../common/common';
 
 function Manage(props: any) {
     const [accounts, setAccounts] = useState(new Array<IAccount>());
@@ -20,21 +21,75 @@ function Manage(props: any) {
     const [deposit, setDeposit] = useState(false);
     const [callback, setCallback] = useState('');
     const [error, setError] = useState('');
-
+    const history = useHistory();
     const classes = useStyles();
 
     useEffect(() => {
         const fetchData = async () => {
             if (props.state.user) {
-                const res = await AccountRepository.getAccountByUserId(Number(props.state.user.id));
-                setAccounts(res.data.data);
-                setCanRequest(false);
+                await getAccountByUserIdHandler(props.state.user.id);
             }
         };
         if (canRequest) {
             fetchData();
         }
     }, []);
+
+    async function getAccountByUserIdHandler(userId: any) {
+        let hasData = false;
+        while (!hasData) {
+            let error: any = await getAccountByUserId(userId);
+            if (error && error.message === 'Request failed with status code 401') {
+                error = await CommonFunction.getNewToken();
+                if (error && error.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+            } else {
+                hasData = true;
+            }
+        }
+    }
+
+    async function getAccountByUserId(userId: number) {
+        try {
+            const res = await AccountRepository.getAccountByUserId(userId);
+            setAccounts(res.data.data);
+            setCanRequest(false);
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async function updateAccountHandler(createOperation: CreateOperation) {
+        let hasUpdate = false;
+        while (!hasUpdate) {
+            let saveAccountError: any = updateAccount(createOperation);
+            if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+                saveAccountError = await CommonFunction.getNewToken();
+                if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+            } else if (saveAccountError) {
+                setError(saveAccountError.message);
+                hasUpdate = true;
+            } else {
+                hasUpdate = true;
+            }
+        }
+    }
+
+    async function updateAccount(createOperation: CreateOperation) {
+        try {
+            const res = await OperationRepository.createOperation(createOperation);
+            if (res.data.error) {
+                setError(res.data.error.message);
+            } else {
+                setCallback('Operation has been done with success');
+            }
+        } catch (e) {
+            return e;
+        }
+    }
 
     const getSelected = (name: string) => {
         switch (name) {
@@ -55,23 +110,14 @@ function Manage(props: any) {
         event.preventDefault();
         setCallback('');
         setError('');
-        try {
-            let formatAmount = Number(amount);
-            if (withdraw) {
-                formatAmount = Number('-' + amount);
-            }
-            const createOperation = new CreateOperation();
-            createOperation.accountId = Number(selectedAccountId);
-            createOperation.amount = Number(formatAmount);
-            const res = await OperationRepository.createOperation(createOperation);
-            if (res.data.error) {
-                setError(res.data.error);
-            } else {
-                setCallback('Operation has been done with success');
-            }
-        } catch (error) {
-            setError(error.message);
+        let formatAmount = Number(amount);
+        if (withdraw) {
+            formatAmount = Number('-' + amount);
         }
+        const createOperation = new CreateOperation();
+        createOperation.accountId = Number(selectedAccountId);
+        createOperation.amount = Number(formatAmount);
+        updateAccountHandler(createOperation);
     };
 
     function disabledButton() {

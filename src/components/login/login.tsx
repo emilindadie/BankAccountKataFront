@@ -5,7 +5,7 @@ import UserRepository from '../../repositories/user';
 import { useStyles } from './style';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-import { setLocalStorage } from '../../utils';
+import { setLocalStorage, setCookie } from '../../utils';
 import { IUser } from '../../models/user/user.i';
 import { connect } from 'react-redux';
 import { AuthAction, AuthState } from '../../reducers/auth';
@@ -30,22 +30,24 @@ function Login(props: any) {
         try {
             const response = await UserRepository.logUser(email, password);
             if (response.data.data) {
-                const token = response.data.data.access_token;
+                const access_token = response.data.data.access_token;
+                const refresh_token = response.data.data.refresh_token;
                 const user = response.data.data.user;
-                updateAuthParams(user, token);
+                updateAuthParams(user, access_token, refresh_token);
                 props.dispatch({ type: 'LOAD_USER', user: response.data.data.user });
                 history.push('/home');
             } else {
-                setFormData({...formData, error: response.data.error});
+                setFormData({...formData, error: response.data.error.message});
             }
         } catch (error) {
             setFormData({...formData, error: error.message});
         }
     };
 
-    function updateAuthParams(user: IUser, token: string) {
+    function updateAuthParams(user: IUser, accessToken: string, refreshToken: string) {
+        setLocalStorage('refresh_token', refreshToken);
+        setCookie('access_token', accessToken);
         setLocalStorage('isAuthenticated', JSON.stringify(true));
-        setLocalStorage('token', token);
         setLocalStorage('user', JSON.stringify(user));
     }
 

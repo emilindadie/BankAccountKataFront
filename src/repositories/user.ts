@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ApiResponse } from '../models/apiResponse/apiResponse';
 import { LoginResponse } from '../models/loginResponse/loginResponse';
 import { Api } from '../api/axios';
+import { NewTokenResponse } from '../models/newTokenResponse/newTokenResponse';
 
 const UserRepository = {
 
@@ -43,6 +44,10 @@ const UserRepository = {
             return await Api.getInstance().post('/user', user);
         }
         throw new Error('Email is not valid');
+    },
+
+    async getNewToken(): Promise<AxiosResponse<ApiResponse<NewTokenResponse>>> {
+        return await Api.getInstance().get('/user/newToken');
     },
 };
 

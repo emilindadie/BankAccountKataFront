@@ -13,18 +13,21 @@ import moment from 'moment';
 import { Search } from './search';
 import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
+import CommonFunction from '../../common/common';
+import { useHistory } from 'react-router-dom';
 
 function Operation(props: any) {
     const [canRequest, setCanRequest] = useState(true);
     const [balance, setBalance] = useState(0);
     const [operations, setOperations] = useState(new Array<IOperation>());
     const classes = useStyles();
+    const history = useHistory();
 
     useEffect(() => {
         setOperations(new Array<IOperation>());
         const fetchData = async () => {
             if (props!.location.state.account.id) {
-                await getOperations(props!.location.state.account.id, undefined, undefined, new Date());
+                await getOperationsHandler(props!.location.state.account.id, undefined, undefined, new Date());
                 setCanRequest(false);
             }
         };
@@ -36,16 +39,53 @@ function Operation(props: any) {
 
     const handleSearch = async (event: any, startDate: Date, endDate: Date) => {
         event.preventDefault();
-        await getOperations(props!.location.state.account.id, startDate, endDate, undefined);
+        getOperationsHandler(props!.location.state.account.id, startDate, endDate, undefined);
+        getBalanceHandler(props!.location.state.account.id, startDate, endDate, undefined);
     };
 
-    async function getOperations(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
+    async function getOperationsHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
+        let hasData = false;
+        while (!hasData) {
+            let error: any = await getOperationByAccountId(id, startDate, endDate, currentDate);
+            if (error && error.message === 'Request failed with status code 401') {
+                error = await CommonFunction.getNewToken();
+                if (error && error.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+            } else {
+                hasData = true;
+            }
+        }
+    }
+
+    async function getOperationByAccountId(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         try {
-            const operationsRes =
-            await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
+            const operationsRes = await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
             if (operationsRes.data.data) {
                 setOperations(operationsRes.data.data);
             }
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async function getBalanceHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
+        let hasData = false;
+        while (!hasData) {
+            let error: any = await getBalance(id, startDate, endDate, currentDate);
+            if (error && error.message === 'Request failed with status code 401') {
+                error = await CommonFunction.getNewToken();
+                if (error && error.message === 'Request failed with status code 401') {
+                    CommonFunction.logoutAction(props, history);
+                }
+            } else {
+                hasData = true;
+            }
+        }
+    }
+
+    async function getBalance(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
+        try {
             const balanceRes = await BalanceRepository.getBalanceByAccountId(id, startDate, endDate, currentDate);
             if (balanceRes.data.data) {
                 setBalance(balanceRes.data.data);

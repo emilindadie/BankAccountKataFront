@@ -1,6 +1,6 @@
 import { IUser } from '../../models/user/user.i';
 import { CreateUser } from '../../models/user/createUser';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import {AxiosResponse } from 'axios';
 import { ApiResponse } from '../../models/apiResponse/apiResponse';
 import { LoginResponse } from '../../models/loginResponse/loginResponse';
 
@@ -29,8 +29,9 @@ export const axiosUserResponse: AxiosResponse<ApiResponse<LoginResponse>> = {
                 address: '14 rue de mulhouse',
             },
             access_token: 'azerty',
+            refresh_token: 'azerty',
         },
-        error: 'Default error',
+        error: { message : 'Default error'},
     },
     headers: [],
     config: {

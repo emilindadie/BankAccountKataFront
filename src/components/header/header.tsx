@@ -6,6 +6,7 @@ import './header.css';
 import { useStyles } from './style';
 import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
+import { removeCookie } from '../../utils';
 
 function Header(props: any) {
     const history = useHistory();
@@ -14,8 +15,9 @@ function Header(props: any) {
     function logOut() {
         props.dispatch({ type: 'LOGOUT' });
         localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        localStorage.removeItem('access_token');
         localStorage.removeItem('isAuthenticated');
+        removeCookie('refresh_token');
         history.push('/');
     }
 
