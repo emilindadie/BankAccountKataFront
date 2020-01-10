@@ -15,6 +15,8 @@ import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
 import CommonFunction from '../../common/common';
 import { useHistory } from 'react-router-dom';
+import { ApiResponse } from '../../models/apiResponse/apiResponse';
+import { replaceCookie, replaceLocalStorage, getLocalStorageValue } from '../../utils';
 
 function Operation(props: any) {
     const [canRequest, setCanRequest] = useState(true);
@@ -31,7 +33,6 @@ function Operation(props: any) {
                 setCanRequest(false);
             }
         };
-
         if (canRequest) {
             fetchData();
         }
@@ -46,52 +47,70 @@ function Operation(props: any) {
     async function getOperationsHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         let hasData = false;
         while (!hasData) {
-            let error: any = await getOperationByAccountId(id, startDate, endDate, currentDate);
-            if (error && error.message === 'Request failed with status code 401') {
-                error = await CommonFunction.getNewToken();
-                if (error && error.message === 'Request failed with status code 401') {
+            const getOperationResponse = await getOperationByAccountId(id, startDate, endDate, currentDate);
+            if (getOperationResponse.error && getOperationResponse.error.message === 'Request failed with status code 401') {
+                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
             } else {
+                updateOperationView(getOperationResponse!.data!);
                 hasData = true;
             }
         }
     }
 
+    function updateOperationView(operations: IOperation[]) {
+        setOperations(operations);
+        setCanRequest(false);
+    }
+
     async function getOperationByAccountId(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         try {
-            const operationsRes = await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
-            console.log(operationsRes);
-            if (operationsRes.data.data) {
-                setOperations(operationsRes.data.data);
-            }
+            const operationsResponse = await OperationRepository.getOperationByAccountId(id, startDate, endDate, currentDate);
+            return operationsResponse.data;
         } catch (e) {
-            return e;
+            const errorResponse: ApiResponse<IOperation[]> = {error : e};
+            return errorResponse;
         }
     }
 
     async function getBalanceHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         let hasData = false;
         while (!hasData) {
-            let error: any = await getBalance(id, startDate, endDate, currentDate);
-            if (error && error.message === 'Request failed with status code 401') {
-                error = await CommonFunction.getNewToken();
-                if (error && error.message === 'Request failed with status code 401') {
+            const getbalanceResponse  = await getBalance(id, startDate, endDate, currentDate);
+            if (getbalanceResponse.error && getbalanceResponse.error.message === 'Request failed with status code 401') {
+                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
             } else {
+                updateBalanceView(getbalanceResponse!.data!);
                 hasData = true;
             }
         }
     }
 
+    function updateBalanceView(balance: number) {
+        setBalance(balance);
+    }
+
     async function getBalance(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
         try {
-            const balanceRes = await BalanceRepository.getBalanceByAccountId(id, startDate, endDate, currentDate);
-            if (balanceRes.data.data) {
-                setBalance(balanceRes.data.data);
-            }
-        } catch (e) { }
+            const balanceResponse = await BalanceRepository.getBalanceByAccountId(id, startDate, endDate, currentDate);
+            return balanceResponse.data;
+        } catch (e) {
+            const errorResponse: ApiResponse<number> = {error : e};
+            return errorResponse;
+        }
     }
 
     return (

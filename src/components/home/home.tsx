@@ -15,6 +15,8 @@ import { CreateAccount } from '../../models/account/createAccount';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
+import { ApiResponse } from '../../models/apiResponse/apiResponse';
+import { replaceCookie, getLocalStorageValue, replaceLocalStorage, removeCookie, setCookie, getCookieValue } from '../../utils';
 
 function Home(props: any) {
     const classes = useStyles();
@@ -38,13 +40,18 @@ function Home(props: any) {
     async function getAccountsHandler(userId: any) {
         let hasData = false;
         while (!hasData) {
-            let error: any = await getAccountByUserId(userId);
-            if (error && error.message === 'Request failed with status code 401') {
-                error = await CommonFunction.getNewToken();
-                if (error && error.message === 'Request failed with status code 401') {
+            const getAccountResponse = await getAccountByUserId(userId);
+            if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
+                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
             } else {
+                updateView(getAccountResponse!.data!);
                 hasData = true;
             }
         }
@@ -52,24 +59,31 @@ function Home(props: any) {
 
     async function getAccountByUserId(userId: number) {
         try {
-            const res = await AccountRepository.getAccountByUserId(userId);
-            setAccounts(res.data.data);
-            setCanRequest(false);
+            const data = await AccountRepository.getAccountByUserId(userId);
+            return data.data;
         } catch (e) {
-            return e;
+            const errorResponse: ApiResponse<IAccount[]> = {error : e};
+            return errorResponse;
         }
+    }
+
+    function updateView(accounts: IAccount[]) {
+            setAccounts(accounts);
+            setCanRequest(false);
     }
 
     async function saveAccountHandler(createAccount: CreateAccount) {
         let hasSave = false;
         while (!hasSave) {
-            let saveAccountError: any = saveAccount(createAccount);
-            if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
-                saveAccountError = await CommonFunction.getNewToken();
-                if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+            const saveAccountResponse: ApiResponse<IAccount> = await saveAccount(createAccount);
+            if (saveAccountResponse.error && saveAccountResponse.error.message === 'Request failed with status code 401') {
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
-                hasSave = true;
             } else {
                 hasSave = true;
             }
@@ -78,7 +92,7 @@ function Home(props: any) {
 
     async function saveAccount(createAccount: CreateAccount) {
         try {
-            const saveAccountResponse = await AccountRepository.createAccount(createAccount);
+            return await AccountRepository.createAccount(createAccount);
         } catch (e) {
             return e;
         }

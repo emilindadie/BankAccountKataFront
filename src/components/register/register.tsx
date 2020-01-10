@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -8,31 +9,35 @@ import { Link } from 'react-router-dom';
 
 export function Register() {
     const classes = useStyles();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [address, setAddress] = useState('');
-    const [password, setPassord] = useState('');
-    const [callback, setCallback] = useState('');
-    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        address: '',
+        callback: '',
+        error: '',
+    });
+
+    const {name, email, password, address, callback, error} = formData;
+
+    const onChange = (e: any) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        setCallback('');
-        setError('');
-        const createUser = new CreateUser();
-        createUser.name = name;
-        createUser.email = email;
-        createUser.password = password;
-        createUser.address = address;
+        setFormData({...formData, callback: ''});
+        setFormData({...formData, error: ''});
+        const createUser = new  CreateUser(name, email, password, address);
         try {
             const response = await UserRepository.createUser(createUser);
             if (response.data.error) {
-                setError(response.data.error.message);
+                setFormData({...formData, error: response.data.error.message});
             } else {
-                setCallback('Your account has been create with success');
+                setFormData({...formData, callback: 'Your account has been create with success'});
             }
         } catch (error) {
-            setError(error.message);
+            setFormData({...formData, error: error.message});
         }
     };
 
@@ -44,7 +49,7 @@ export function Register() {
     }
 
     return (
-        <form className={classes.container} noValidate autoComplete='off'>
+        <form className={classes.container} noValidate autoComplete='off' onSubmit={handleSubmit}>
             <div>
                 <TextField
                     id='register_name_input'
@@ -52,8 +57,9 @@ export function Register() {
                     label='Name'
                     margin='normal'
                     variant='outlined'
+                    name='name'
                     value={name}
-                    onChange={event => setName(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>
@@ -63,8 +69,9 @@ export function Register() {
                     label='Email'
                     margin='normal'
                     variant='outlined'
+                    name='email'
                     value={email}
-                    onChange={event => setEmail(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>
@@ -74,8 +81,9 @@ export function Register() {
                     label='Address'
                     margin='normal'
                     variant='outlined'
+                    name='address'
                     value={address}
-                    onChange={event => setAddress(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>
@@ -86,13 +94,14 @@ export function Register() {
                     margin='normal'
                     variant='outlined'
                     type='password'
+                    name='password'
                     value={password}
-                    onChange={event => setPassord(event.target.value)}
+                    onChange={event => onChange(event)}
                 />
             </div>
             <div>
                 <Button disabled={disabledButton()} data-testid='register_submit_btn' variant='contained' color='primary'
-                    className={classes.button} onClick={handleSubmit}>
+                    className={classes.button} type='submit'>
                     SignUp
                 </Button>
             </div>

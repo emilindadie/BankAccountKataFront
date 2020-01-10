@@ -42,4 +42,5 @@ export function replaceCookie(key: string, value: string) {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
     });
+    return true;
 }

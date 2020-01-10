@@ -12,11 +12,7 @@ export const user: IUser = {
     address: '14 rue de mulhouse',
 };
 
-export const createUser = new CreateUser();
-createUser.name = 'Emilin';
-createUser.email = 'dadie.emilin@gmail.com';
-createUser.password = 'azerty';
-createUser.address = '14 rue de mulhouse';
+export const createUser = new CreateUser('Emilin', 'dadie.emilin@gmail.com', 'azerty', '14 rue de mulhouse');
 
 export const axiosUserResponse: AxiosResponse<ApiResponse<LoginResponse>> = {
     data: {
@@ -28,8 +24,8 @@ export const axiosUserResponse: AxiosResponse<ApiResponse<LoginResponse>> = {
                 password: 'azerty',
                 address: '14 rue de mulhouse',
             },
-            access_token: 'azerty',
-            refresh_token: 'azerty',
+            accessToken: 'azerty',
+            refreshToken: 'azerty',
         },
         error: { message : 'Default error'},
     },

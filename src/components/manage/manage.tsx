@@ -11,6 +11,9 @@ import { connect } from 'react-redux';
 import { AuthState, AuthAction } from '../../reducers/auth';
 import { useHistory } from 'react-router-dom';
 import CommonFunction from '../../common/common';
+import { ApiResponse } from '../../models/apiResponse/apiResponse';
+import { IOperation } from '../../models/operation/operation.i';
+import { replaceCookie, getLocalStorageValue, replaceLocalStorage } from '../../utils';
 
 function Manage(props: any) {
     const [accounts, setAccounts] = useState(new Array<IAccount>());
@@ -38,13 +41,18 @@ function Manage(props: any) {
     async function getAccountByUserIdHandler(userId: any) {
         let hasData = false;
         while (!hasData) {
-            let error: any = await getAccountByUserId(userId);
-            if (error && error.message === 'Request failed with status code 401') {
-                error = await CommonFunction.getNewToken();
-                if (error && error.message === 'Request failed with status code 401') {
+            const getAccountResponse = await getAccountByUserId(userId);
+            if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
+                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
             } else {
+                updateAccountView(getAccountResponse!.data!);
                 hasData = true;
             }
         }
@@ -52,27 +60,37 @@ function Manage(props: any) {
 
     async function getAccountByUserId(userId: number) {
         try {
-            const res = await AccountRepository.getAccountByUserId(userId);
-            setAccounts(res.data.data);
-            setCanRequest(false);
+            const data = await AccountRepository.getAccountByUserId(userId);
+            return data.data;
         } catch (e) {
-            return e;
+            const errorResponse: ApiResponse<IAccount[]> = {error : e};
+            return errorResponse;
         }
+    }
+
+    function updateAccountView(accounts: IAccount[]) {
+        setAccounts(accounts);
+        setCanRequest(false);
     }
 
     async function updateAccountHandler(createOperation: CreateOperation) {
         let hasUpdate = false;
         while (!hasUpdate) {
-            let saveAccountError: any = updateAccount(createOperation);
-            if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
-                saveAccountError = await CommonFunction.getNewToken();
-                if (saveAccountError && saveAccountError.message === 'Request failed with status code 401') {
+            const updateAccountResponse = await updateAccount(createOperation);
+            if (updateAccountResponse.error && updateAccountResponse.error.message === 'Request failed with status code 401') {
+                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+                const getNewTokenResponse = await CommonFunction.getNewToken();
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
                     CommonFunction.logoutAction(props, history);
+                } else {
+                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
                 }
-            } else if (saveAccountError) {
-                setError(saveAccountError.message);
+            } else if (updateAccountResponse.error && updateAccountResponse.error.message !== 'Request failed with status code 401') {
+                setError(updateAccountResponse.error.message);
                 hasUpdate = true;
             } else {
+                updateCallBackView(updateAccountResponse!);
                 hasUpdate = true;
             }
         }
@@ -80,14 +98,19 @@ function Manage(props: any) {
 
     async function updateAccount(createOperation: CreateOperation) {
         try {
-            const res = await OperationRepository.createOperation(createOperation);
-            if (res.data.error) {
-                setError(res.data.error.message);
-            } else {
-                setCallback('Operation has been done with success');
-            }
+            const response = await OperationRepository.createOperation(createOperation);
+            return response.data;
         } catch (e) {
-            return e;
+            const errorResponse: ApiResponse<IOperation> = {error : e};
+            return errorResponse;
+        }
+    }
+
+    function updateCallBackView(response: ApiResponse<IOperation>) {
+        if (response!.error) {
+            setError(response!.error!.message);
+        } else {
+            setCallback('Operation has been done with success');
         }
     }
 
@@ -127,16 +150,22 @@ function Manage(props: any) {
         return false;
     }
 
+    function resetInput() {
+        setAmount('');
+        setSelectedAccountId('');
+        setCallback('');
+        setError('');
+    }
+
     return (
         <div className={classes.manageContainer}>
             <h1 className={classes.title}>Welcome  {props.state.user!.name}</h1>
             <div className={classes.operationContainer}>
                 <Card id='withdraw_card_button' className={`${classes.card} ${getSelected('withdraw') ? classes.selectedCard : ''}`} onClick={
                     event => {
-                        setAmount('');
-                        setSelectedAccountId('');
                         setWithdraw(true);
                         setDeposit(false);
+                        resetInput();
                     }
                 }>
                     <CardContent>
@@ -145,10 +174,9 @@ function Manage(props: any) {
                 </Card>
                 <Card id='deposit_card_button' className={`${classes.card} ${getSelected('deposit') ? classes.selectedCard : ''}`} onClick={
                     event => {
-                        setAmount('');
-                        setSelectedAccountId('');
                         setWithdraw(false);
                         setDeposit(true);
+                        resetInput();
                     }
                 }>
                     <CardContent>

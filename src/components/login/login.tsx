@@ -6,9 +6,9 @@ import { useStyles } from './style';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { setLocalStorage, setCookie } from '../../utils';
-import { IUser } from '../../models/user/user.i';
 import { connect } from 'react-redux';
 import { AuthAction, AuthState } from '../../reducers/auth';
+import { LoginResponse } from '../../models/loginResponse/loginResponse';
 
 function Login(props: any) {
     const history = useHistory();
@@ -29,26 +29,27 @@ function Login(props: any) {
         setFormData({...formData, error: ''});
         try {
             const response = await UserRepository.logUser(email, password);
-            if (response.data.data) {
-                const access_token = response.data.data.access_token;
-                const refresh_token = response.data.data.refresh_token;
-                const user = response.data.data.user;
-                updateAuthParams(user, access_token, refresh_token);
-                props.dispatch({ type: 'LOAD_USER', user: response.data.data.user });
-                history.push('/home');
+            if (response.data!) {
+                updateAuthState(response.data!.data!);
+                goToHome();
             } else {
-                setFormData({...formData, error: response.data.error.message});
+                setFormData({...formData, error: response.data!.error!.message});
             }
         } catch (error) {
             setFormData({...formData, error: error.message});
         }
     };
 
-    function updateAuthParams(user: IUser, accessToken: string, refreshToken: string) {
-        setLocalStorage('refresh_token', refreshToken);
-        setCookie('access_token', accessToken);
+    function goToHome() {
+        history.push('/home');
+    }
+
+    function updateAuthState({user , accessToken, refreshToken}: LoginResponse) {
+        setLocalStorage('refreshToken', refreshToken);
+        setCookie('accessToken', accessToken);
         setLocalStorage('isAuthenticated', JSON.stringify(true));
         setLocalStorage('user', JSON.stringify(user));
+        props.dispatch({ type: 'LOAD_USER', user: user });
     }
 
     function disabledButton() {

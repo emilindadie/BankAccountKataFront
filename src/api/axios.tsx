@@ -7,7 +7,7 @@ export class Api {
         return axios.create({
             baseURL: 'http://localhost:3001',
             headers: {
-                Authorization: 'bearer ' + getCookieValue('access_token'),
+                Authorization: 'bearer ' + getCookieValue('accessToken'),
             },
         });
     }
