@@ -14,6 +14,7 @@ import CommonFunction from '../../common/common';
 import { ApiResponse } from '../../models/apiResponse/apiResponse';
 import { IOperation } from '../../models/operation/operation.i';
 import { replaceCookie, getLocalStorageValue, replaceLocalStorage } from '../../utils';
+import { user } from '../../tests-files';
 
 function Manage(props: any) {
     const [accounts, setAccounts] = useState(new Array<IAccount>());
@@ -39,8 +40,6 @@ function Manage(props: any) {
     }, []);
 
     async function getAccountByUserIdHandler(userId: any) {
-        let hasData = false;
-        while (!hasData) {
             const getAccountResponse = await getAccountByUserId(userId);
             if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
                 replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
@@ -50,12 +49,11 @@ function Manage(props: any) {
                 } else {
                     replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
                     replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                    await getAccountByUserIdHandler(userId);
                 }
             } else {
                 updateAccountView(getAccountResponse!.data!);
-                hasData = true;
             }
-        }
     }
 
     async function getAccountByUserId(userId: number) {
@@ -74,25 +72,21 @@ function Manage(props: any) {
     }
 
     async function updateAccountHandler(createOperation: CreateOperation) {
-        let hasUpdate = false;
-        while (!hasUpdate) {
-            const updateAccountResponse = await updateAccount(createOperation);
-            if (updateAccountResponse.error && updateAccountResponse.error.message === 'Request failed with status code 401') {
-                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
-                const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
-                    CommonFunction.logoutAction(props, history);
-                } else {
-                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
-                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
-                }
-            } else if (updateAccountResponse.error && updateAccountResponse.error.message !== 'Request failed with status code 401') {
-                setError(updateAccountResponse.error.message);
-                hasUpdate = true;
+        const updateAccountResponse = await updateAccount(createOperation);
+        if (updateAccountResponse.error && updateAccountResponse.error.message === 'Request failed with status code 401') {
+            replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+            const getNewTokenResponse = await CommonFunction.getNewToken();
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
+                CommonFunction.logoutAction(props, history);
             } else {
-                updateCallBackView(updateAccountResponse!);
-                hasUpdate = true;
+                replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                await updateAccountHandler(createOperation);
             }
+        } else if (updateAccountResponse.error && updateAccountResponse.error.message !== 'Request failed with status code 401') {
+            setError(updateAccountResponse.error.message);
+        } else {
+            updateCallBackView(updateAccountResponse!);
         }
     }
 

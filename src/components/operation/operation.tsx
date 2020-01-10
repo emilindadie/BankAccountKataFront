@@ -40,27 +40,24 @@ function Operation(props: any) {
 
     const handleSearch = async (event: any, startDate: Date, endDate: Date) => {
         event.preventDefault();
-        getOperationsHandler(props!.location.state.account.id, startDate, endDate, undefined);
-        getBalanceHandler(props!.location.state.account.id, startDate, endDate, undefined);
+        await getOperationsHandler(props!.location.state.account.id, startDate, endDate, undefined);
+        await getBalanceHandler(props!.location.state.account.id, startDate, endDate, undefined);
     };
 
     async function getOperationsHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
-        let hasData = false;
-        while (!hasData) {
-            const getOperationResponse = await getOperationByAccountId(id, startDate, endDate, currentDate);
-            if (getOperationResponse.error && getOperationResponse.error.message === 'Request failed with status code 401') {
-                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
-                const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
-                    CommonFunction.logoutAction(props, history);
-                } else {
-                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
-                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
-                }
+        const getOperationResponse = await getOperationByAccountId(id, startDate, endDate, currentDate);
+        if (getOperationResponse.error && getOperationResponse.error.message === 'Request failed with status code 401') {
+            replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+            const getNewTokenResponse = await CommonFunction.getNewToken();
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
+                CommonFunction.logoutAction(props, history);
             } else {
-                updateOperationView(getOperationResponse!.data!);
-                hasData = true;
+                replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                await getOperationsHandler(id, startDate, endDate, currentDate);
             }
+        } else {
+            updateOperationView(getOperationResponse!.data!);
         }
     }
 
@@ -80,22 +77,19 @@ function Operation(props: any) {
     }
 
     async function getBalanceHandler(id: number, startDate?: Date, endDate?: Date, currentDate?: Date) {
-        let hasData = false;
-        while (!hasData) {
-            const getbalanceResponse  = await getBalance(id, startDate, endDate, currentDate);
-            if (getbalanceResponse.error && getbalanceResponse.error.message === 'Request failed with status code 401') {
-                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
-                const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
-                    CommonFunction.logoutAction(props, history);
-                } else {
-                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
-                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
-                }
+        const getbalanceResponse  = await getBalance(id, startDate, endDate, currentDate);
+        if (getbalanceResponse.error && getbalanceResponse.error.message === 'Request failed with status code 401') {
+            replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+            const getNewTokenResponse = await CommonFunction.getNewToken();
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
+                CommonFunction.logoutAction(props, history);
             } else {
-                updateBalanceView(getbalanceResponse!.data!);
-                hasData = true;
+                replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                await getBalanceHandler(props!.location.state.account.id, startDate, endDate, currentDate);
             }
+        } else {
+            updateBalanceView(getbalanceResponse!.data!);
         }
     }
 

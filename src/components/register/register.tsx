@@ -28,7 +28,7 @@ export function Register() {
         event.preventDefault();
         setFormData({...formData, callback: ''});
         setFormData({...formData, error: ''});
-        const createUser = new  CreateUser(name, email, password, address);
+        const createUser = new  CreateUser(name, email, address, password);
         try {
             const response = await UserRepository.createUser(createUser);
             if (response.data.error) {

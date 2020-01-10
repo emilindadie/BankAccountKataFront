@@ -38,22 +38,19 @@ function Home(props: any) {
     }, [props.state.user]);
 
     async function getAccountsHandler(userId: any) {
-        let hasData = false;
-        while (!hasData) {
-            const getAccountResponse = await getAccountByUserId(userId);
-            if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
-                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
-                const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
-                    CommonFunction.logoutAction(props, history);
-                } else {
-                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
-                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
-                }
+        const getAccountResponse = await getAccountByUserId(userId);
+        if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
+            replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+            const getNewTokenResponse = await CommonFunction.getNewToken();
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
+                CommonFunction.logoutAction(props, history);
             } else {
-                updateView(getAccountResponse!.data!);
-                hasData = true;
+                replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                await getAccountsHandler(userId);
             }
+        } else {
+            updateView(getAccountResponse!.data!);
         }
     }
 
@@ -73,21 +70,17 @@ function Home(props: any) {
     }
 
     async function saveAccountHandler(createAccount: CreateAccount) {
-        let hasSave = false;
-        while (!hasSave) {
             const saveAccountResponse: ApiResponse<IAccount> = await saveAccount(createAccount);
             if (saveAccountResponse.error && saveAccountResponse.error.message === 'Request failed with status code 401') {
                 const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
+                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
                     CommonFunction.logoutAction(props, history);
                 } else {
                     replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
                     replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                    await saveAccountHandler(createAccount);
                 }
-            } else {
-                hasSave = true;
             }
-        }
     }
 
     async function saveAccount(createAccount: CreateAccount) {

@@ -29,7 +29,7 @@ function Login(props: any) {
         setFormData({...formData, error: ''});
         try {
             const response = await UserRepository.logUser(email, password);
-            if (response.data!) {
+            if (response.data!.data!) {
                 updateAuthState(response.data!.data!);
                 goToHome();
             } else {
@@ -49,7 +49,7 @@ function Login(props: any) {
         setCookie('accessToken', accessToken);
         setLocalStorage('isAuthenticated', JSON.stringify(true));
         setLocalStorage('user', JSON.stringify(user));
-        props.dispatch({ type: 'LOAD_USER', user: user });
+        props.dispatch({ type: 'LOAD_USER', user });
     }
 
     function disabledButton() {
