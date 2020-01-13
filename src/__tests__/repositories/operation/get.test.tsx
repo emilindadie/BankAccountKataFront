@@ -15,7 +15,7 @@ describe('Account Repository : get account', () => {
             await OperationRepository.getOperationByAccountId(inputAccountId, undefined, undefined, new Date());
 
         // Assert
-        expect(output.data.data[0].id).toBeDefined();
+        expect(output.data!.data![0].id).toBeDefined();
         expect(getSpy).toHaveBeenCalledTimes(1);
     });
 });

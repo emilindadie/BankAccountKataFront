@@ -26,6 +26,6 @@ describe('operatiob Repository : create operation', () => {
 
         // Assert
         expect(createSpy).toHaveBeenCalledTimes(1);
-        expect(output.data.data.id).toBeDefined();
+        expect(output.data!.data!.id).toBeDefined();
     });
 });

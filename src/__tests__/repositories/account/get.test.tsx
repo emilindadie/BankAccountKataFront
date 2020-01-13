@@ -17,7 +17,7 @@ describe('Account Repository : get account', () => {
         const output: AxiosResponse<ApiResponse<IAccount[]>> = await AccountRepository.getAccountByUserId(inputUserId);
 
         // Assert
-        expect(output.data.data[0].id).toBeDefined();
+        expect(output.data!.data![0].id).toBeDefined();
         expect(getSpy).toHaveBeenCalledTimes(1);
     });
 });

@@ -39,7 +39,7 @@ describe('User Repository : log user', () => {
         const output: AxiosResponse<ApiResponse<LoginResponse>> = await UserRepository.logUser(inputEmail, inputPassword);
 
         // Assert
-        expect(output.data.data.user.id).toBeDefined();
+        expect(output.data!.data!.user.id).toBeDefined();
         expect(loginSpy).toHaveBeenCalledTimes(1);
     });
 

@@ -38,7 +38,7 @@ describe('Account Repository : create account', () => {
         const output: AxiosResponse<ApiResponse<IAccount>> = await AccountRepository.createAccount(inputCreateAccount);
 
         // Assert
-        expect(output.data.data.id).toBeDefined();
+        expect(output.data!.data!.id).toBeDefined();
         expect(createSpy).toHaveBeenCalledTimes(1);
     });
 
