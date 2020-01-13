@@ -14,7 +14,6 @@ import CommonFunction from '../../common/common';
 import { ApiResponse } from '../../models/apiResponse/apiResponse';
 import { IOperation } from '../../models/operation/operation.i';
 import { replaceCookie, getLocalStorageValue, replaceLocalStorage } from '../../utils';
-import { user } from '../../tests-files';
 
 function Manage(props: any) {
     const [accounts, setAccounts] = useState(new Array<IAccount>());
@@ -40,20 +39,20 @@ function Manage(props: any) {
     }, []);
 
     async function getAccountByUserIdHandler(userId: any) {
-            const getAccountResponse = await getAccountByUserId(userId);
-            if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
-                replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
-                const getNewTokenResponse = await CommonFunction.getNewToken();
-                if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
-                    CommonFunction.logoutAction(props, history);
-                } else {
-                    replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
-                    replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
-                    await getAccountByUserIdHandler(userId);
-                }
+        const getAccountResponse = await getAccountByUserId(userId);
+        if (getAccountResponse.error && getAccountResponse.error.message === 'Request failed with status code 401') {
+            replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
+            const getNewTokenResponse = await CommonFunction.getNewToken();
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
+                CommonFunction.logoutAction(props, history);
             } else {
-                updateAccountView(getAccountResponse!.data!);
+                replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
+                replaceLocalStorage('refreshToken', getNewTokenResponse!.data!.refreshToken);
+                await getAccountByUserIdHandler(userId);
             }
+        } else {
+            updateAccountView(getAccountResponse!.data!);
+        }
     }
 
     async function getAccountByUserId(userId: number) {

@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios';
 import { IAccount } from '../../../models/account/account.i';
 import { ApiResponse } from '../../../models/apiResponse/apiResponse';
 describe('Account Repository : get account', () => {
-
     it('should get user account', async () => {
         // Arrange
         const inputUserId = 1;

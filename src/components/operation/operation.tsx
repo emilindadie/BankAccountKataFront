@@ -49,7 +49,7 @@ function Operation(props: any) {
         if (getOperationResponse.error && getOperationResponse.error.message === 'Request failed with status code 401') {
             replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
             const getNewTokenResponse = await CommonFunction.getNewToken();
-            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'Request failed with status code 401') {
+            if (getNewTokenResponse.error && getNewTokenResponse.error.message === 'jwt expired') {
                 CommonFunction.logoutAction(props, history);
             } else {
                 replaceCookie('accessToken', getNewTokenResponse!.data!.accessToken);
