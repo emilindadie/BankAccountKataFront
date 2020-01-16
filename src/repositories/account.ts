@@ -21,13 +21,13 @@ const AccountRepository = {
         }
         const valideEmailType = this.validEmailType(account.user.email);
         if (valideEmailType) {
-            return await Api.getInstance().post('/account', account);
+            return await Api.getInstance().post('/accounts', account);
         }
         throw new Error('Email is not valid');
     },
 
     async getAccountByUserId(userId: number): Promise<AxiosResponse<ApiResponse<IAccount[]>>> {
-        return await Api.getInstance().get('/account', { params: { userId } });
+        return await Api.getInstance().get('/accounts', { params: { userId } });
     },
 };
 

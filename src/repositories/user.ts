@@ -29,7 +29,7 @@ const UserRepository = {
         }
         const valideEmailAndPasswod = this.validEmailAndPassword(email, password);
         if (valideEmailAndPasswod) {
-            return await Api.getInstance().post('/user/login', { email, password });
+            return await Api.getInstance().post('/users/login', { email, password });
         }
         throw new Error('Email and password is required!');
     },
@@ -41,13 +41,13 @@ const UserRepository = {
         }
         const valideEmailType = this.validEmailType(user.email);
         if (valideEmailType) {
-            return await Api.getInstance().post('/user', user);
+            return await Api.getInstance().post('/users', user);
         }
         throw new Error('Email is not valid');
     },
 
     async getNewToken(): Promise<AxiosResponse<ApiResponse<NewTokenResponse>>> {
-        return await Api.getInstance().get('/user/newToken');
+        return await Api.getInstance().get('/users/newToken');
     },
 };
 

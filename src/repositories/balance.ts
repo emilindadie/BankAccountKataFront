@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 
 const BalanceRepository = {
     async getBalanceByAccountId(accountId: number, startDate?: Date, endDate?: Date, localDate?: Date): Promise<AxiosResponse<ApiResponse<number>>> {
-        return await Api.getInstance().get('/balance', { params: { accountId, startDate, endDate, localDate } });
+        return await Api.getInstance().get('/balances', { params: { accountId, startDate, endDate, localDate } });
     },
 };
 
