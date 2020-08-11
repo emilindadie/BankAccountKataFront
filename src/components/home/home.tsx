@@ -70,7 +70,7 @@ function Home(props: any) {
     }
 
     async function saveAccountHandler(createAccount: CreateAccount) {
-            const saveAccountResponse: ApiResponse<IAccount> = await saveAccount(createAccount);  
+            const saveAccountResponse: ApiResponse<IAccount> = await saveAccount(createAccount);
             if (saveAccountResponse.error && saveAccountResponse.error.message === 'Request failed with status code 401') {
                 replaceCookie('accessToken', getLocalStorageValue('refreshToken'));
                 const getNewTokenResponse = await CommonFunction.getNewToken();

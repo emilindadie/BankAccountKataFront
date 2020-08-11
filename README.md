@@ -35,6 +35,13 @@ https://www.slideshare.net/secret/5VRmSQqnsNefsH
 
 https://docs.google.com/presentation/d/1ykeXnn0tQDUygtBIWzQwovgqDhRP6ba_yfiJZgr2nso/edit?usp=sharing
 
+
+# Configure proxy in local developement (package?json file replace:) 
+
+```sh
+"proxy": "http://localhost:${your_server_port}",
+```
+
 # Run api
 ```sh
 $ npm run start
